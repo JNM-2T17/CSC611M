@@ -1,0 +1,551 @@
+ENTER: 1
+true
+used memory: 2.0 MB
+0.083 seconds
+
+true
+used memory: 2.0 MB
+0.07 seconds
+
+true
+used memory: 2.0 MB
+0.067 seconds
+
+true
+used memory: 2.0 MB
+0.064 seconds
+
+true
+used memory: 2.0 MB
+0.064 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.0696 seconds
+- - - - - - - -
+ENTER: 2
+true
+used memory: 2.0 MB
+0.082 seconds
+
+true
+used memory: 2.0 MB
+0.07 seconds
+
+true
+used memory: 2.0 MB
+0.05 seconds
+
+true
+used memory: 2.0 MB
+0.048 seconds
+
+true
+used memory: 2.0 MB
+0.05 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.06 seconds
+- - - - - - - -
+ENTER: 3
+true
+used memory: 2.0 MB
+0.09 seconds
+
+true
+used memory: 2.0 MB
+0.045 seconds
+
+true
+used memory: 2.0 MB
+0.048 seconds
+
+true
+used memory: 2.0 MB
+0.048 seconds
+
+true
+used memory: 2.0 MB
+0.048 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.0558 seconds
+- - - - - - - -
+ENTER: 4
+true
+used memory: 2.0 MB
+0.068 seconds
+
+true
+used memory: 2.0 MB
+0.043 seconds
+
+true
+used memory: 2.0 MB
+0.052 seconds
+
+true
+used memory: 3.0 MB
+0.045 seconds
+
+true
+used memory: 3.0 MB
+0.045 seconds
+
+Average Memory: 2.4 MB
+Average Time: 0.0506 seconds
+- - - - - - - -
+ENTER: 5
+true
+used memory: 2.0 MB
+0.079 seconds
+
+true
+used memory: 3.0 MB
+0.042 seconds
+
+true
+used memory: 3.0 MB
+0.044 seconds
+
+true
+used memory: 3.0 MB
+0.054 seconds
+
+true
+used memory: 3.0 MB
+0.049 seconds
+
+Average Memory: 2.8 MB
+Average Time: 0.0536 seconds
+- - - - - - - -
+ENTER: 6
+true
+used memory: 2.0 MB
+0.063 seconds
+
+true
+used memory: 3.0 MB
+0.043 seconds
+
+true
+used memory: 3.0 MB
+0.045 seconds
+
+true
+used memory: 3.0 MB
+0.052 seconds
+
+true
+used memory: 3.0 MB
+0.043 seconds
+
+Average Memory: 2.8 MB
+Average Time: 0.0492 seconds
+- - - - - - - -
+ENTER: 7
+true
+used memory: 3.0 MB
+0.057 seconds
+
+true
+used memory: 3.0 MB
+0.049 seconds
+
+true
+used memory: 3.0 MB
+0.047 seconds
+
+true
+used memory: 3.0 MB
+0.044 seconds
+
+true
+used memory: 3.0 MB
+0.054 seconds
+
+Average Memory: 3.0 MB
+Average Time: 0.0502 seconds
+- - - - - - - -
+ENTER: 8
+true
+used memory: 3.0 MB
+0.067 seconds
+
+true
+used memory: 3.0 MB
+0.049 seconds
+
+true
+used memory: 3.0 MB
+0.05 seconds
+
+true
+used memory: 3.0 MB
+0.047 seconds
+
+true
+used memory: 3.0 MB
+0.057 seconds
+
+Average Memory: 3.0 MB
+Average Time: 0.054 seconds
+- - - - - - - -
+ENTER: 9
+true
+used memory: 3.0 MB
+0.085 seconds
+
+true
+used memory: 3.0 MB
+0.056 seconds
+
+true
+used memory: 3.0 MB
+0.058 seconds
+
+true
+used memory: 3.0 MB
+0.063 seconds
+
+true
+used memory: 4.0 MB
+0.052 seconds
+
+Average Memory: 3.2 MB
+Average Time: 0.0628 seconds
+- - - - - - - -
+ENTER: 10
+true
+used memory: 3.0 MB
+0.093 seconds
+
+true
+used memory: 3.0 MB
+0.069 seconds
+
+true
+used memory: 4.0 MB
+0.07 seconds
+
+true
+used memory: 5.0 MB
+0.072 seconds
+
+true
+used memory: 5.0 MB
+0.075 seconds
+
+Average Memory: 4.0 MB
+Average Time: 0.0758 seconds
+- - - - - - - -
+ENTER: 11
+true
+used memory: 3.0 MB
+0.122 seconds
+
+true
+used memory: 5.0 MB
+0.112 seconds
+
+true
+used memory: 6.0 MB
+0.132 seconds
+
+true
+used memory: 7.0 MB
+0.113 seconds
+
+true
+used memory: 9.0 MB
+0.146 seconds
+
+Average Memory: 6.0 MB
+Average Time: 0.125 seconds
+- - - - - - - -
+ENTER: 12
+true
+used memory: 5.0 MB
+0.225 seconds
+
+true
+used memory: 8.0 MB
+0.237 seconds
+
+true
+used memory: 11.0 MB
+0.221 seconds
+
+true
+used memory: 13.0 MB
+0.218 seconds
+
+true
+used memory: 16.0 MB
+0.211 seconds
+
+Average Memory: 10.6 MB
+Average Time: 0.2224 seconds
+- - - - - - - -
+ENTER: 13
+true
+used memory: 7.0 MB
+0.433 seconds
+
+true
+used memory: 13.0 MB
+0.384 seconds
+
+true
+used memory: 18.0 MB
+0.384 seconds
+
+true
+used memory: 23.0 MB
+0.384 seconds
+
+true
+used memory: 28.0 MB
+0.387 seconds
+
+Average Memory: 17.8 MB
+Average Time: 0.3944 seconds
+- - - - - - - -
+ENTER: 14
+true
+used memory: 13.0 MB
+0.946 seconds
+
+true
+used memory: 22.0 MB
+0.934 seconds
+
+true
+used memory: 1.0 MB
+0.84 seconds
+
+true
+used memory: 11.0 MB
+0.844 seconds
+
+true
+used memory: 21.0 MB
+0.841 seconds
+
+Average Memory: 13.6 MB
+Average Time: 0.881 seconds
+- - - - - - - -
+ENTER: 15
+true
+used memory: 22.0 MB
+1.839 seconds
+
+true
+used memory: 11.0 MB
+1.825 seconds
+
+true
+used memory: 31.0 MB
+1.913 seconds
+
+true
+used memory: 19.0 MB
+2.073 seconds
+
+true
+used memory: 7.0 MB
+1.783 seconds
+
+Average Memory: 18.0 MB
+Average Time: 1.8866 seconds
+- - - - - - - -
+ENTER: 16
+true
+used memory: 13.0 MB
+3.704 seconds
+
+true
+used memory: 22.0 MB
+3.539 seconds
+
+true
+used memory: 32.0 MB
+3.494 seconds
+
+true
+used memory: 10.0 MB
+3.539 seconds
+
+true
+used memory: 20.0 MB
+3.574 seconds
+
+Average Memory: 19.4 MB
+Average Time: 3.57 seconds
+- - - - - - - -
+ENTER: 17
+true
+used memory: 19.0 MB
+7.3 seconds
+
+true
+used memory: 4.0 MB
+7.185 seconds
+
+true
+used memory: 23.0 MB
+6.686 seconds
+
+true
+used memory: 13.0 MB
+6.817 seconds
+
+true
+used memory: 8.0 MB
+6.334 seconds
+
+Average Memory: 13.4 MB
+Average Time: 6.8644 seconds
+- - - - - - - -
+ENTER: 18
+true
+used memory: 10.0 MB
+15.395 seconds
+
+true
+used memory: 25.0 MB
+14.372 seconds
+
+true
+used memory: 25.0 MB
+13.681 seconds
+
+true
+used memory: 21.0 MB
+13.75 seconds
+
+true
+used memory: 3.0 MB
+13.496 seconds
+
+Average Memory: 16.8 MB
+Average Time: 14.1388 seconds
+- - - - - - - -
+ENTER: 19
+true
+used memory: 25.0 MB
+29.559 seconds
+
+true
+used memory: 21.0 MB
+28.237 seconds
+
+true
+used memory: 8.0 MB
+27.104 seconds
+
+true
+used memory: 19.0 MB
+26.797 seconds
+
+true
+used memory: 6.0 MB
+26.999 seconds
+
+Average Memory: 15.8 MB
+Average Time: 27.7392 seconds
+- - - - - - - -
+ENTER: 20
+true
+used memory: 20.0 MB
+56.588 seconds
+
+true
+used memory: 18.0 MB
+53.955 seconds
+
+true
+used memory: 16.0 MB
+54.074 seconds
+
+true
+used memory: 14.0 MB
+54.133 seconds
+
+true
+used memory: 13.0 MB
+53.924 seconds
+
+Average Memory: 16.2 MB
+Average Time: 54.5348 seconds
+- - - - - - - -
+ENTER: 21
+true
+used memory: 19.0 MB
+106.892 seconds
+
+true
+used memory: 16.0 MB
+107.524 seconds
+
+true
+used memory: 13.0 MB
+108.589 seconds
+
+true
+used memory: 11.0 MB
+108.394 seconds
+
+true
+used memory: 8.0 MB
+107.4 seconds
+
+Average Memory: 13.4 MB
+Average Time: 107.7598 seconds
+- - - - - - - -
+ENTER: 22
+true
+used memory: 15.0 MB
+214.751 seconds
+
+true
+used memory: 7.0 MB
+215.652 seconds
+
+true
+used memory: 23.0 MB
+219.662 seconds
+
+true
+used memory: 15.0 MB
+236.363 seconds
+
+true
+used memory: 8.0 MB
+232.342 seconds
+
+Average Memory: 13.6 MB
+Average Time: 223.754 seconds
+- - - - - - - -
+ENTER: 23
+true
+used memory: 11.0 MB
+585.663 seconds
+
+true
+used memory: 23.0 MB
+475.64 seconds
+
+true
+used memory: 13.0 MB
+479.513 seconds
+
+true
+used memory: 2.0 MB
+468.961 seconds
+
+true
+used memory: 14.0 MB
+458.688 seconds
+
+Average Memory: 12.6 MB
+Average Time: 493.693 seconds

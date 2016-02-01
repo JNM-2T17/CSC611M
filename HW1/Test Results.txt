@@ -1,0 +1,289 @@
+ENTER: 0
+true
+used memory: 2.8802032470703125 MB
+0.649 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.519 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.466 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.572 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.558 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.5528 seconds
+
+ENTER: 1
+true
+used memory: 2.8802032470703125 MB
+0.381 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.304 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.293 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.288 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.38 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.3292 seconds
+
+ENTER: 2
+true
+used memory: 2.8802032470703125 MB
+0.278 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.249 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.243 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.192 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.178 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.228 seconds
+
+ENTER: 3
+true
+used memory: 2.8802032470703125 MB
+0.295 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.29 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.246 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.303 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.253 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.2774 seconds
+
+ENTER: 4
+true
+used memory: 2.8802032470703125 MB
+0.315 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.285 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.27 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.275 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.277 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.2844 seconds
+
+ENTER: 5
+true
+used memory: 2.8802032470703125 MB
+0.279 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.202 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.158 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.142 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.151 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.1864 seconds
+
+ENTER: 6
+true
+used memory: 2.8802032470703125 MB
+0.231 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.192 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.142 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.148 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.136 seconds
+
+Average Memory: 2.0 MB
+Average Time: 0.1698 seconds
+
+ENTER: 7
+true
+used memory: 2.8802032470703125 MB
+0.367 seconds
+
+true
+used memory: 2.8802032470703125 MB
+0.293 seconds
+
+true
+used memory: 3.8405609130859375 MB
+0.279 seconds
+
+true
+used memory: 3.8405609130859375 MB
+0.225 seconds
+
+true
+used memory: 3.8405609130859375 MB
+0.241 seconds
+
+Average Memory: 2.6 MB
+Average Time: 0.281 seconds
+
+ENTER: 8
+true
+used memory: 2.8802032470703125 MB
+0.338 seconds
+
+true
+used memory: 3.8402252197265625 MB
+0.307 seconds
+
+true
+used memory: 3.8402252197265625 MB
+0.325 seconds
+
+true
+used memory: 3.8402252197265625 MB
+0.271 seconds
+
+true
+used memory: 4.8002471923828125 MB
+0.272 seconds
+
+Average Memory: 3.0 MB
+Average Time: 0.3026 seconds
+
+ENTER: 9
+true
+used memory: 3.8402023315429688 MB
+0.555 seconds
+
+true
+used memory: 4.800224304199219 MB
+0.608 seconds
+
+true
+used memory: 4.800224304199219 MB
+0.247 seconds
+
+true
+used memory: 5.760581970214844 MB
+0.25 seconds
+
+true
+used memory: 5.760581970214844 MB
+0.759 seconds
+
+Average Memory: 4.2 MB
+Average Time: 0.4838 seconds
+
+ENTER: 10
+true
+used memory: 4.800224304199219 MB
+1.017 seconds
+
+true
+used memory: 5.7609710693359375 MB
+3.067 seconds
+
+true
+used memory: 5.7609710693359375 MB
+0.607 seconds
+
+true
+used memory: 6.72100830078125 MB
+0.302 seconds
+
+true
+used memory: 7.6810455322265625 MB
+0.606 seconds
+
+Average Memory: 5.4 MB
+Average Time: 1.1198 seconds
+
+ENTER: 11
+true
+used memory: 4.800559997558594 MB
+0.48 seconds
+
+true
+used memory: 5.76055908203125 MB
+0.433 seconds
+
+true
+used memory: 8.640640258789062 MB
+0.414 seconds
+
+true
+used memory: 10.561454772949219 MB
+0.376 seconds
+
+true
+used memory: 11.521492004394531 MB
+0.358 seconds
+
+Average Memory: 7.6 MB
+Average Time: 0.4122 seconds
+
+D:\DLSU\Term 8\CSC611M\Requirements\HW1>
