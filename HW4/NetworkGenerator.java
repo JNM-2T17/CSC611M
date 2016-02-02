@@ -3,12 +3,12 @@ import java.io.*;
 public class NetworkGenerator {
 	public static void main(String[] args) {
 		try {
-			// PrintWriter pw = new PrintWriter(
-			// 					new FileWriter(
-			// 						new File("layout.sort")));
-			DataOutputStream dos = new DataOutputStream(
-										new FileOutputStream(
-											new File("layout.sort")));
+			PrintWriter pw = new PrintWriter(
+								new FileWriter(
+									new File("layout.sort")));
+			// DataOutputStream dos = new DataOutputStream(
+			// 							new FileOutputStream(
+			// 								new File("layout.sort")));
 			int nums = (int)Math.pow(2,Integer.parseInt(args[0]));
 			int depth = (int)(Math.log(nums) / Math.log(2));
 
@@ -41,9 +41,9 @@ public class NetworkGenerator {
 							default:
 								partner = 0;
 						}
-						// pw.print(k + "-" + partner + " ");
-						dos.writeInt(k);
-						dos.writeInt(partner);
+						pw.print(k + "-" + partner + " ");
+						// dos.writeInt(k);
+						// dos.writeInt(partner);
 						// System.out.print(k + "-" + partner + " ");
 						chunk--;
 						k++;
@@ -55,11 +55,11 @@ public class NetworkGenerator {
 					}
 					state = BITONIC;
 					// System.out.println();
-					// pw.println();
+					pw.println();
 				}
 			}
-			// pw.close();
-			dos.close();
+			pw.close();
+			// dos.close();
 
 			time = System.currentTimeMillis() - time;
 			System.out.println("File generated after " + (time / 1000.0) + "s");
