@@ -35,11 +35,12 @@ public class Driver {
 
 			long time = System.currentTimeMillis();
 
-			//sort that shit
 			sort(0,n - 1);
 
 			time = System.currentTimeMillis() - time;
 
+			//CPU caches on first iteration, making it slower.
+			//first iteration is not considered
 			if( i > 0 ) {
 				ave += time;
 			}
@@ -73,7 +74,6 @@ public class Driver {
 
 	public static synchronized Thread[] threadResources(int s, int m, int e
 														, int operation) {
-		// System.out.println("Threads Left: " + threads + " get");
 		if( threads >= 2) {
 			Thread[] threadList = new Thread[] {
 				new Thread(new Operation(operation,s,m)),
@@ -87,12 +87,10 @@ public class Driver {
 	}
 
 	public static synchronized void signal() {
-		// System.out.println("Threads Left: " + threads + " signal");
 		threads++;
 	}
 
 	public static void sort(int s,int e) {
-		// pw.println("Sorter: " + s + "-" + e);
 		if( e - s == 1 ) {
 			compare(s,e);
 		} else {
@@ -118,7 +116,6 @@ public class Driver {
 	}
 
 	public static void merge(int s, int e) {
-		// pw.println("Merger: " + s + "-" + e);
 		int mid = s + (e - s) / 2;
 		int len = e - s + 1;
 		int s2 = s;
@@ -145,7 +142,6 @@ public class Driver {
 	}
 
 	public static void bitonicSort(int s, int e) {
-		// pw.println("Bitonic: " + s + "-" + e);
 		if( e - s == 1 ) {
 			compare(s,e);
 		} else {
