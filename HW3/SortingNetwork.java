@@ -6,7 +6,7 @@ public class SortingNetwork {
 	private static ArrayList<Operation> ops;
 
 	public static void main(String[] args) throws Exception {
-		int n = Integer.parseInt(args[0]);
+		int n = (int)Math.pow(2,Integer.parseInt(args[0]));
 		int depth = lg(n);
 		depth = depth * (depth + 1) / 2;
 		comparators = new ArrayList<ArrayList<String>>();
@@ -21,6 +21,7 @@ public class SortingNetwork {
 			Operation o = ops.get(ops.size() - 1);
 			ops.remove(ops.size() - 1);
 			o.operate();
+			System.out.println(ops.size());
 		}
 
 		PrintWriter pw = new PrintWriter(     new BufferedWriter( new

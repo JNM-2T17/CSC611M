@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.File;
 
 public class Driver {
-	public static int numElem = 8000000;
+	public static int numElem = (int)Math.pow(2,20);
 	public static int[] arr = new int[numElem];
 
 	public static void main(String args[]) throws Exception {

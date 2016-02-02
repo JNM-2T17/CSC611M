@@ -91,6 +91,7 @@ public class Driver {
 
 	public static synchronized void signal() {
 		threads++;
+		// System.out.println(threads + " threads");
 	}
 
 	public static void sort(int s,int e) {
@@ -119,6 +120,7 @@ public class Driver {
 	}
 
 	public static void merge(int s, int e) {
+		System.out.println("MERGING " + s + " to " + e + " with " + threads + " threads");
 		int mid = s + (e - s) / 2;
 		int len = e - s + 1;
 		int s2 = s;
