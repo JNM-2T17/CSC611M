@@ -14,7 +14,7 @@ public class BitonicMulti {
     static volatile int threadsDoneInLayer;
     
     public static void main(String[] args) throws FileNotFoundException, IOException{
-        BufferedReader br = new BufferedReader(new FileReader("nums.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("nums.sort"));
         for(int i=0; i<n; i++){
             nums[i] = new Integer(br.readLine());
         }

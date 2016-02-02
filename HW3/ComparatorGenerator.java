@@ -34,7 +34,7 @@ public class ComparatorGenerator {
         int elem = (int)Math.pow(2, exp);
         PrintWriter pw = new PrintWriter(
                             new FileWriter(
-                                    new File("nums.txt")));
+                                    new File("nums.sort")));
 
         for(int i = 0; i < elem; i++ ) {
             pw.print(random());

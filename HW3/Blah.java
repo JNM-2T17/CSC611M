@@ -5,7 +5,7 @@ public class Blah {
 		int elem = (int)Math.pow(2,Integer.parseInt(args[0]));
 		PrintWriter pw = new PrintWriter(
 							new FileWriter(
-								new File("nums.txt")));
+								new File("nums.sort")));
 
 		for(int i = 0; i < elem; i++ ) {
 			pw.print(random());

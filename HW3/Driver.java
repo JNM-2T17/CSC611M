@@ -5,10 +5,13 @@ public class Driver {
 	private static int[] dummy;
 	private static int[] nums;
 	public static volatile int threads;
+
+	/** operation constants */
 	public static final int SORT = 0;
 	public static final int BITONIC = 1;
 
 	public static void main(String[] args) throws Exception {
+
 		//length of list to sort and no. of threads
 		int n = (int)Math.pow(2,Integer.parseInt(args[0]));
 		threads = (int)Math.pow(2,Integer.parseInt(args[1])) - 1;
@@ -17,7 +20,7 @@ public class Driver {
 		depth = depth * (depth + 1) / 2;
 		
 		//read nums
-		BufferedReader br = new BufferedReader(new FileReader("nums.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("nums.sort"));
 		dummy = new int[n];
 		nums = new int[n];
         for(int i=0; i<n; i++){

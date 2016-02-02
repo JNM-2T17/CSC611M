@@ -13,7 +13,7 @@ public class BitonicSingle {
     static int threadCount;
     
     public static void main(String[] args) throws FileNotFoundException, IOException{
-        BufferedReader br = new BufferedReader(new FileReader("nums.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("nums.sort"));
         for(int i=0; i<n; i++){
             nums[i] = new Integer(br.readLine());
         }
@@ -54,7 +54,7 @@ public class BitonicSingle {
     }
 
     private static int getTriangular(int exp) {
-        return total * (total + 1) / 2;
+        return exp * (exp + 1) / 2;
     }
     
     static class Comparator implements Runnable {
