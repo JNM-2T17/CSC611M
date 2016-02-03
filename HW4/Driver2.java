@@ -5,23 +5,37 @@ public class Driver2 {
 	public static int[] nums;
 
 	public static void main(String[] args) throws Exception {
+		
+		//number of numbers
 		int numCount = (int)Math.pow(2,Integer.parseInt(args[0]));
+
+		//number of threads
 		int threads = (int)Math.pow(2,Integer.parseInt(args[1]));
+
+		//max layers in a merger
 		int depth = (int)(Math.log(numCount) / Math.log(2));
+
+		// comparators per thread
 		int compsPerThread = numCount / 2 / threads;
+
+		//list of threads
 		CompareThread[][] threadList 
 			= new CompareThread[depth * (depth + 1) / 2][threads];
 
 		long time = System.currentTimeMillis();
 
-		int size = 2;
-		int start = 0;
+		int size = 2; //number of elements being sorted at a time
+		int start = 0; //start of current block
 
+		//what is being created at the moment
 		final int MERGE = 0;
 		final int BITONIC = 1;
 		int state = MERGE;
 
+		//level in network
 		int level = 0;
+
+		//for each block
 		for(int i = 1; i <= depth; i++,size *= 2) {
 			int currSize = size;
 			state = MERGE;
@@ -29,13 +43,19 @@ public class Driver2 {
 				System.out.println("Level " + level);
 				start = 0;
 				int k = 0;
-				int chunk = currSize / 2;
-				int currThreads = 0;
-				int currIndex = 0;
+				int chunk = currSize / 2; //number of comps before skip
+				int currComps = 0;  //comparators already threads
+				int currIndex = 0; //current thread in layer
+
+				//for each wire
 				while(k < numCount) {
-					if(currThreads == 0) {
+
+					//no comps yet, create thread
+					if(currComps == 0) {
 						threadList[level][currIndex] = new CompareThread();
 					}
+
+
 					int partner;
 					switch(state) {
 						case MERGE:
@@ -49,9 +69,9 @@ public class Driver2 {
 					}
 					threadList[level][currIndex].add(k,partner);
 					// System.out.println(k + "-" + partner + " to thread " + currIndex + " of level " + level);
-					currThreads++;
-					if(currThreads == compsPerThread) {
-						currThreads = 0;
+					currComps++;
+					if(currComps == compsPerThread) {
+						currComps = 0;
 						currIndex++;
 					}
 					// dos.writeInt(k);
