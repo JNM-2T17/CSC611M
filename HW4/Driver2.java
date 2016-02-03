@@ -3,29 +3,142 @@ import java.io.*;
 public class Driver2 {
 	public static int[] dummy;
 	public static int[] nums;
+	private static int numCount;
+	private static int threads;
+	private static int depth;
+	private static int compsPerThread;
+	private static int size;
+	private static int start;
 
 	public static void main(String[] args) throws Exception {
-		
 		//number of numbers
-		int numCount = (int)Math.pow(2,Integer.parseInt(args[0]));
+		numCount = (int)Math.pow(2,Integer.parseInt(args[0]));
 
 		//number of threads
-		int threads = (int)Math.pow(2,Integer.parseInt(args[1]));
+		threads = (int)Math.pow(2,Integer.parseInt(args[1]));
 
 		//max layers in a merger
-		int depth = (int)(Math.log(numCount) / Math.log(2));
+		depth = (int)(Math.log(numCount) / Math.log(2));
 
 		// comparators per thread
-		int compsPerThread = numCount / 2 / threads;
+		compsPerThread = numCount / 2 / threads;
+
+		size = 2; //number of elements being sorted at a time
+		start = 0; //start of current block
+
+		//read nums
+		BufferedReader br2 = new BufferedReader(new FileReader("nums.sort"));
+		dummy = new int[numCount];
+		nums = new int[numCount];
+        for(int i=0; i<numCount; i++){
+            nums[i] = Integer.parseInt(br2.readLine());
+        }
+        br2.close();
+
+        boolean isSorted = true;
+		for(int j = 0; j < numCount - 1; j++ ){
+			if(nums[j] > nums[j + 1]){
+				isSorted = false;
+				break;
+			}
+		}
+		System.out.println("isSorted: " + isSorted);
+
+        float ave = 0;
+		
+		CompareThread[][] threadList;
+		long time;
+		int currDepth;
+
+		for(int g = 0; g < 2; g++){
+			int half = (int)Math.floor((Math.sqrt(2 * Math.pow(depth,2) + 2 * depth + 1) - 1)/2);
+
+			if(g == 0){
+				threadList = generateThreadList(1, half);
+				System.out.println(threadList.length);
+			}
+
+			else{
+				threadList = generateThreadList(half + 1, depth);
+				System.out.println(threadList.length);
+			}
+
+			
+
+	        // depth = depth * (depth + 1) / 2;
+
+			// for(int i = 0; i < 6; i++) {
+			// 	//copy original list
+			// 	for(int j = 0; j < numCount; j++) {
+			// 		nums[j] = dummy[j];
+			// 	}
+
+				time = System.currentTimeMillis();
+
+				System.out.println("threadList.length: " + threadList.length);
+
+				for(int layer = 0; layer < threadList.length; layer++) {
+					for(int j = 0; j < threads; j++) {
+						// System.out.println("Starting thread " + j + " at layer " + layer);
+						threadList[layer][j].start();
+					}
+
+					for(int j = 0; j < threads; j++) {
+						threadList[layer][j].join();
+					}	
+				}
+
+				time = System.currentTimeMillis() - time;
+
+				System.out.println("time: " + (time / 1000.0) + " seconds");
+			// }
+
+			// //CPU caches on first iteration, making it slower.
+			// //first iteration is not considered
+			// if( i > 0 ) {
+			// 	ave += time;
+			// }
+
+			// if( i > 0 ) {
+			// 	System.out.println("List is " + (isSorted ? "" : "not ") 
+			// 					+ "sorted at " + (time / 1000.0) + " seconds");
+			// }
+
+			// if( i < 5 ) {
+			// 	for(int i2 = 0; i2 < depth; i2++) {
+			// 		// System.out.println("Cloning Level " + i2);
+			// 		// String[] comps = br.readLine().split(" ");
+			// 		int curr = 0;
+			// 		for(int j = 0; j < threads; j++) {
+			// 			threadList[i2][j] = threadList[i2][j].copy();
+			// 		}
+			// 	}
+			// }
+
+			isSorted = true;
+			for(int j = 0; j < numCount - 1; j++ ){
+				if(nums[j] > nums[j + 1]){
+					isSorted = false;
+					break;
+				}
+			}
+			System.out.println("isSorted: " + isSorted);
+		}
+
+		//check if sorted
+		
+
+
+		// System.out.println("Average time: " + (ave / 5000.0) + "s");
+	}
+
+	private static CompareThread[][] generateThreadList(int gStart, int gEnd){
 
 		//list of threads
 		CompareThread[][] threadList 
-			= new CompareThread[depth * (depth + 1) / 2][threads];
+			= new CompareThread[(gEnd * (gEnd + 1) / 2) - ((gStart - 1) * gStart / 2) ][threads];
 
-		long time = System.currentTimeMillis();
-
-		int size = 2; //number of elements being sorted at a time
-		int start = 0; //start of current block
+		long time = System.currentTimeMillis();		
 
 		//what is being created at the moment
 		final int MERGE = 0;
@@ -36,7 +149,7 @@ public class Driver2 {
 		int level = 0;
 
 		//for each block
-		for(int i = 1; i <= depth; i++,size *= 2) {
+		for(int i = gStart; i <= gEnd; i++,size *= 2) {
 			int currSize = size;
 			state = MERGE;
 			for(int j = i; j > 0; j--,currSize /= 2) {
@@ -70,6 +183,7 @@ public class Driver2 {
 					threadList[level][currIndex].add(k,partner);
 					// System.out.println(k + "-" + partner + " to thread " + currIndex + " of level " + level);
 					currComps++;
+
 					if(currComps == compsPerThread) {
 						currComps = 0;
 						currIndex++;
@@ -88,76 +202,16 @@ public class Driver2 {
 				state = BITONIC;
 				// System.out.println();
 				// pw.println();
+
 				level++;
 			}
 		}
-		
+
 		time = System.currentTimeMillis() - time;
 		System.out.println("File generated after " + (time / 1000.0) + "s");
-			
-		//read nums
-		BufferedReader br2 = new BufferedReader(new FileReader("nums.sort"));
-		dummy = new int[numCount];
-		nums = new int[numCount];
-        for(int i=0; i<numCount; i++){
-            dummy[i] = Integer.parseInt(br2.readLine());
-        }
-        br2.close();
 
-        float ave = 0;
+		System.out.println(threadList[0][0].toString());
 
-        depth = depth * (depth + 1) / 2;
-
-		for(int i = 0; i < 6; i++) {
-			//copy original list
-			for(int j = 0; j < numCount; j++) {
-				nums[j] = dummy[j];
-			}
-
-			time = System.currentTimeMillis();
-
-			for(int layer = 0; layer < depth; layer++) {
-				for(int j = 0; j < threads; j++) {
-					// System.out.println("Starting thread " + j + " at layer " + layer);
-					threadList[layer][j].start();
-				}
-
-				for(int j = 0; j < threads; j++) {
-					threadList[layer][j].join();
-				}	
-			}
-
-			time = System.currentTimeMillis() - time;
-
-			//CPU caches on first iteration, making it slower.
-			//first iteration is not considered
-			if( i > 0 ) {
-				ave += time;
-			}
-
-			//check if sorted
-			boolean isSorted = true;
-			for(int j = 0; isSorted && j < numCount - 1; j++ ){
-				isSorted = nums[j] <= nums[j + 1];
-			}
-
-			if( i > 0 ) {
-				System.out.println("List is " + (isSorted ? "" : "not ") 
-								+ "sorted at " + (time / 1000.0) + " seconds");
-			}
-
-			if( i < 5 ) {
-				for(int i2 = 0; i2 < depth; i2++) {
-					// System.out.println("Cloning Level " + i2);
-					// String[] comps = br.readLine().split(" ");
-					int curr = 0;
-					for(int j = 0; j < threads; j++) {
-						threadList[i2][j] = threadList[i2][j].copy();
-					}
-				}
-			}
-		}
-
-		System.out.println("Average time: " + (ave / 5000.0) + "s");
+		return threadList;
 	}
 }

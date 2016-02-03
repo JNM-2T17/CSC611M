@@ -28,4 +28,8 @@ public class CompareThread extends Thread {
 	public CompareThread copy() {
 		return new CompareThread(comparators);
 	}
+
+	public String toString(){
+		return comparators.get(0)[0] + " - " + comparators.get(0)[1];
+	}
 }
