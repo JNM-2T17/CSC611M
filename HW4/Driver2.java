@@ -23,26 +23,14 @@ public class Driver2 {
 		// comparators per thread
 		compsPerThread = numCount / 2 / threads;
 
-		size = 2; //number of elements being sorted at a time
-		start = 0; //start of current block
-
 		//read nums
 		BufferedReader br2 = new BufferedReader(new FileReader("nums.sort"));
 		dummy = new int[numCount];
 		nums = new int[numCount];
         for(int i=0; i<numCount; i++){
-            nums[i] = Integer.parseInt(br2.readLine());
+            dummy[i] = Integer.parseInt(br2.readLine());
         }
         br2.close();
-
-        boolean isSorted = true;
-		for(int j = 0; j < numCount - 1; j++ ){
-			if(nums[j] > nums[j + 1]){
-				isSorted = false;
-				break;
-			}
-		}
-		System.out.println("isSorted: " + isSorted);
 
         float ave = 0;
 		
@@ -50,36 +38,33 @@ public class Driver2 {
 		long time;
 		int currDepth;
 
-		for(int g = 0; g < 2; g++){
-			int half = (int)Math.floor((Math.sqrt(2 * Math.pow(depth,2) + 2 * depth + 1) - 1)/2);
+		// depth = depth * (depth + 1) / 2;
 
-			if(g == 0){
-				threadList = generateThreadList(1, half);
-				System.out.println(threadList.length);
+		for(int i = 0; i < 6; i++){
+
+			float currTime = 0;
+			size = 2; //number of elements being sorted at a time
+			start = 0; //start of current block
+
+			for(int j = 0; j < numCount; j++) {
+				nums[j] = dummy[j];
 			}
 
-			else{
-				threadList = generateThreadList(half + 1, depth);
-				System.out.println(threadList.length);
-			}
+			for(int g = 0; g < 2; g++){
+				int half = (int)Math.floor((Math.sqrt(2 * Math.pow(depth,2) + 2 * depth + 1) - 1)/2);
 
-			
+				if(g == 0){
+					threadList = generateThreadList(1, half);
+				}
 
-	        // depth = depth * (depth + 1) / 2;
-
-			// for(int i = 0; i < 6; i++) {
-			// 	//copy original list
-			// 	for(int j = 0; j < numCount; j++) {
-			// 		nums[j] = dummy[j];
-			// 	}
+				else{
+					threadList = generateThreadList(half + 1, depth);
+				}
 
 				time = System.currentTimeMillis();
 
-				System.out.println("threadList.length: " + threadList.length);
-
 				for(int layer = 0; layer < threadList.length; layer++) {
 					for(int j = 0; j < threads; j++) {
-						// System.out.println("Starting thread " + j + " at layer " + layer);
 						threadList[layer][j].start();
 					}
 
@@ -88,48 +73,34 @@ public class Driver2 {
 					}	
 				}
 
-				time = System.currentTimeMillis() - time;
+				currTime += System.currentTimeMillis() - time;
+				
+			}
 
-				System.out.println("time: " + (time / 1000.0) + " seconds");
-			// }
+			//CPU caches on first iteration, making it slower.
+			//first iteration is not considered
+			if( i > 0 ) {
+				ave += currTime;
+			}
 
-			// //CPU caches on first iteration, making it slower.
-			// //first iteration is not considered
-			// if( i > 0 ) {
-			// 	ave += time;
-			// }
-
-			// if( i > 0 ) {
-			// 	System.out.println("List is " + (isSorted ? "" : "not ") 
-			// 					+ "sorted at " + (time / 1000.0) + " seconds");
-			// }
-
-			// if( i < 5 ) {
-			// 	for(int i2 = 0; i2 < depth; i2++) {
-			// 		// System.out.println("Cloning Level " + i2);
-			// 		// String[] comps = br.readLine().split(" ");
-			// 		int curr = 0;
-			// 		for(int j = 0; j < threads; j++) {
-			// 			threadList[i2][j] = threadList[i2][j].copy();
-			// 		}
-			// 	}
-			// }
-
-			isSorted = true;
+			boolean isSorted = true;
 			for(int j = 0; j < numCount - 1; j++ ){
 				if(nums[j] > nums[j + 1]){
 					isSorted = false;
 					break;
 				}
 			}
-			System.out.println("isSorted: " + isSorted);
-		}
+
+			if( i > 0 ) {
+				System.out.println("List is " + (isSorted ? "" : "not ") 
+								+ "sorted at " + (currTime / 1000.0) + " seconds");
+			}		}
 
 		//check if sorted
 		
 
 
-		// System.out.println("Average time: " + (ave / 5000.0) + "s");
+		System.out.println("Average time: " + (ave / 5000.0) + "s");
 	}
 
 	private static CompareThread[][] generateThreadList(int gStart, int gEnd){
@@ -153,7 +124,7 @@ public class Driver2 {
 			int currSize = size;
 			state = MERGE;
 			for(int j = i; j > 0; j--,currSize /= 2) {
-				System.out.println("Level " + level);
+				// System.out.println("Level " + level);
 				start = 0;
 				int k = 0;
 				int chunk = currSize / 2; //number of comps before skip
@@ -208,9 +179,7 @@ public class Driver2 {
 		}
 
 		time = System.currentTimeMillis() - time;
-		System.out.println("File generated after " + (time / 1000.0) + "s");
-
-		System.out.println(threadList[0][0].toString());
+		// System.out.println("File generated after " + (time / 1000.0) + "s");
 
 		return threadList;
 	}
