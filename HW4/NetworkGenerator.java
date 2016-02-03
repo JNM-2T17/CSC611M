@@ -41,7 +41,7 @@ public class NetworkGenerator {
 							default:
 								partner = 0;
 						}
-						pw.print(k + "-" + partner + " ");
+						pw.println(k + "-" + partner);
 						// dos.writeInt(k);
 						// dos.writeInt(partner);
 						// System.out.print(k + "-" + partner + " ");
@@ -55,7 +55,7 @@ public class NetworkGenerator {
 					}
 					state = BITONIC;
 					// System.out.println();
-					pw.println();
+					// pw.println();
 				}
 			}
 			pw.close();
