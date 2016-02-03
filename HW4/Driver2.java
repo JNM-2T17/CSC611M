@@ -37,6 +37,7 @@ public class Driver2 {
 		CompareThread[][] threadList;
 		long time;
 		int currDepth;
+		float maxTime = 0;
 
 		// depth = depth * (depth + 1) / 2;
 
@@ -79,10 +80,11 @@ public class Driver2 {
 
 			//CPU caches on first iteration, making it slower.
 			//first iteration is not considered
-			if( i > 0 ) {
-				ave += currTime;
+			ave += currTime;
+			if( currTime > maxTime) {
+				maxTime = currTime;
 			}
-
+			
 			boolean isSorted = true;
 			for(int j = 0; j < numCount - 1; j++ ){
 				if(nums[j] > nums[j + 1]){
@@ -91,14 +93,13 @@ public class Driver2 {
 				}
 			}
 
-			if( i > 0 ) {
-				System.out.println("List is " + (isSorted ? "" : "not ") 
-								+ "sorted at " + (currTime / 1000.0) + " seconds");
-			}		}
+			System.out.println("List is " + (isSorted ? "" : "not ") 
+							+ "sorted at " + (currTime / 1000.0) + " seconds");
+		}
 
 		//check if sorted
 		
-
+		ave -= maxTime;
 
 		System.out.println("Average time: " + (ave / 5000.0) + "s");
 	}
