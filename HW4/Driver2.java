@@ -51,31 +51,57 @@ public class Driver2 {
 				nums[j] = dummy[j];
 			}
 
-			for(int g = 0; g < 2; g++){
-				int half = (int)Math.floor((Math.sqrt(2 * Math.pow(depth,2) + 2 * depth + 1) - 1)/2);
+			// int half = (int)Math.floor((Math.sqrt(2 * Math.pow(depth,2) + 2 * depth + 1) - 1)/2);
+			// int divSize = (int)Math.ceil(depth/divisions);
+			// int depthLeft = depth;
+			// int actualDivs = divisions;
 
-				if(g == 0){
-					threadList = generateThreadList(1, half);
-				}
+			int divisions[] = getDivisions(Integer.parseInt(args[0]), Integer.parseInt(args[2]));
 
-				else{
-					threadList = generateThreadList(half + 1, depth);
-				}
+			int actualDivs = divisions.length;
 
-				time = System.currentTimeMillis();
+			for(int g = 0; g < divisions.length; g++){
+				// if(depthLeft > divSize){
+				// 	threadList = generateThreadList(g * divSize + 1, g * divSize + divSize);
+				// 	depthLeft -= divSize;
+				// }
+				// else if(depthLeft > 0){
+				// 	threadList = generateThreadList(g * divSize + 1, depth);
+				// 	depthLeft -= divSize;
+				// }
+				// else{
+				// 	actualDivs--;
+				// 	threadList = null;
+				// }
 
-				for(int layer = 0; layer < threadList.length; layer++) {
-					for(int j = 0; j < threads; j++) {
-						threadList[layer][j].start();
+				if(divisions[g] != 0){
+					if(g == 0){
+						threadList = generateThreadList(1, divisions[0]);
+					}
+					else{
+						threadList = generateThreadList(divisions[g - 1] + 1, divisions[g]);
 					}
 
-					for(int j = 0; j < threads; j++) {
-						threadList[layer][j].join();
-					}	
-				}
+					// System.out.print("Start time snippet: ");
+					time = System.currentTimeMillis();
 
-				currTime += System.currentTimeMillis() - time;
-				
+					for(int layer = 0; layer < threadList.length; layer++) {
+						for(int j = 0; j < threads; j++) {
+							threadList[layer][j].start();
+						}
+
+						for(int j = 0; j < threads; j++) {
+							threadList[layer][j].join();
+						}	
+					}
+
+					time = System.currentTimeMillis() - time;
+					// System.out.println("Time snippet: " + (time / 1000.0) + "s");
+					currTime += time;
+				}
+				else{
+					actualDivs--;
+				}
 			}
 
 			//CPU caches on first iteration, making it slower.
@@ -94,21 +120,17 @@ public class Driver2 {
 			}
 
 			System.out.println("List is " + (isSorted ? "" : "not ") 
-							+ "sorted at " + (currTime / 1000.0) + " seconds");
+								+ "sorted at " + (currTime / 1000.0) + " seconds "
+								+ "with " + actualDivs + " divisions");
 		}
-
-		//check if sorted
-		
 		ave -= maxTime;
-
 		System.out.println("Average time: " + (ave / 5000.0) + "s");
 	}
 
 	private static CompareThread[][] generateThreadList(int gStart, int gEnd){
-
 		//list of threads
 		CompareThread[][] threadList 
-			= new CompareThread[(gEnd * (gEnd + 1) / 2) - ((gStart - 1) * gStart / 2) ][threads];
+			= new CompareThread[(gEnd * (gEnd + 1) / 2) - ((gStart - 1) * gStart / 2)][threads];
 
 		long time = System.currentTimeMillis();		
 
@@ -180,8 +202,25 @@ public class Driver2 {
 		}
 
 		time = System.currentTimeMillis() - time;
-		// System.out.println("File generated after " + (time / 1000.0) + "s");
+		// System.out.println("File (" + gStart + " - " + gEnd + ") generated after " + (time / 1000.0) + "s");
 
 		return threadList;
+	}
+
+	public static int[] getDivisions(int blocks,int divisions) {
+		int[] answers = new int[divisions];
+		int total = blocks * (blocks + 1) / 2;
+		int partition = total / divisions;
+		int runningPartition = partition;
+		int runningTotal = 0;
+		for(int i = 1,j = 0; i <= blocks; i++) {
+			runningTotal += i;
+			if(runningTotal >= runningPartition) {
+				runningPartition += partition;
+				answers[j] = i;
+				j++;
+			}
+		}
+		return answers;
 	}
 }
