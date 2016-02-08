@@ -120,7 +120,7 @@ public class Driver {
 	}
 
 	public static void merge(int s, int e) {
-		System.out.println("MERGING " + s + " to " + e + " with " + threads + " threads");
+		// System.out.println("MERGING " + s + " to " + e + " with " + threads + " threads");
 		int mid = s + (e - s) / 2;
 		int len = e - s + 1;
 		int s2 = s;
