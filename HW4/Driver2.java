@@ -51,38 +51,21 @@ public class Driver2 {
 				nums[j] = dummy[j];
 			}
 
-			// int half = (int)Math.floor((Math.sqrt(2 * Math.pow(depth,2) + 2 * depth + 1) - 1)/2);
-			// int divSize = (int)Math.ceil(depth/divisions);
-			// int depthLeft = depth;
-			// int actualDivs = divisions;
-
-			int divisions[] = getDivisions(Integer.parseInt(args[0]), Integer.parseInt(args[2]));
+			int divisions[] = getDivisions(Integer.parseInt(args[0])
+											, Integer.parseInt(args[2]));
 
 			int actualDivs = divisions.length;
 
 			for(int g = 0; g < divisions.length; g++){
-				// if(depthLeft > divSize){
-				// 	threadList = generateThreadList(g * divSize + 1, g * divSize + divSize);
-				// 	depthLeft -= divSize;
-				// }
-				// else if(depthLeft > 0){
-				// 	threadList = generateThreadList(g * divSize + 1, depth);
-				// 	depthLeft -= divSize;
-				// }
-				// else{
-				// 	actualDivs--;
-				// 	threadList = null;
-				// }
-
 				if(divisions[g] != 0){
 					if(g == 0){
 						threadList = generateThreadList(1, divisions[0]);
 					}
 					else{
-						threadList = generateThreadList(divisions[g - 1] + 1, divisions[g]);
+						threadList = generateThreadList(divisions[g - 1] + 1
+															, divisions[g]);
 					}
 
-					// System.out.print("Start time snippet: ");
 					time = System.currentTimeMillis();
 
 					for(int layer = 0; layer < threadList.length; layer++) {
@@ -96,7 +79,6 @@ public class Driver2 {
 					}
 
 					time = System.currentTimeMillis() - time;
-					// System.out.println("Time snippet: " + (time / 1000.0) + "s");
 					currTime += time;
 				}
 				else{
@@ -120,8 +102,8 @@ public class Driver2 {
 			}
 
 			System.out.println("List is " + (isSorted ? "" : "not ") 
-								+ "sorted at " + (currTime / 1000.0) + " seconds "
-								+ "with " + actualDivs + " divisions");
+								+ "sorted at " + (currTime / 1000.0) 
+								+ " seconds with " + actualDivs + " divisions");
 		}
 		ave -= maxTime;
 		System.out.println("Average time: " + (ave / 5000.0) + "s");
@@ -130,7 +112,8 @@ public class Driver2 {
 	private static CompareThread[][] generateThreadList(int gStart, int gEnd){
 		//list of threads
 		CompareThread[][] threadList 
-			= new CompareThread[(gEnd * (gEnd + 1) / 2) - ((gStart - 1) * gStart / 2)][threads];
+			= new CompareThread[(gEnd * (gEnd + 1) / 2) 
+									- ((gStart - 1) * gStart / 2)][threads];
 
 		long time = System.currentTimeMillis();		
 
@@ -147,7 +130,6 @@ public class Driver2 {
 			int currSize = size;
 			state = MERGE;
 			for(int j = i; j > 0; j--,currSize /= 2) {
-				// System.out.println("Level " + level);
 				start = 0;
 				int k = 0;
 				int chunk = currSize / 2; //number of comps before skip
@@ -162,7 +144,6 @@ public class Driver2 {
 						threadList[level][currIndex] = new CompareThread();
 					}
 
-
 					int partner;
 					switch(state) {
 						case MERGE:
@@ -175,16 +156,13 @@ public class Driver2 {
 							partner = 0;
 					}
 					threadList[level][currIndex].add(k,partner);
-					// System.out.println(k + "-" + partner + " to thread " + currIndex + " of level " + level);
 					currComps++;
 
 					if(currComps == compsPerThread) {
 						currComps = 0;
 						currIndex++;
 					}
-					// dos.writeInt(k);
-					// dos.writeInt(partner);
-					// System.out.print(k + "-" + partner + " ");
+					
 					chunk--;
 					k++;
 					if( chunk == 0) {
@@ -194,16 +172,13 @@ public class Driver2 {
 					}
 				}
 				state = BITONIC;
-				// System.out.println();
-				// pw.println();
-
+				
 				level++;
 			}
 		}
 
 		time = System.currentTimeMillis() - time;
-		// System.out.println("File (" + gStart + " - " + gEnd + ") generated after " + (time / 1000.0) + "s");
-
+		
 		return threadList;
 	}
 
