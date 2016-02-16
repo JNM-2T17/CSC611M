@@ -1,0 +1,128 @@
+Monitor RC {
+	int trainCap = 0;
+	boolean loadable = false;
+	boolean unloadable = false;
+	Condition boardCond, leaveCond, full, empty;
+
+	tryBoard() {
+		while(!loadable || trainCap == CAPACITY) {
+			boardCond.wait();
+		}
+		trainCap++;
+		if( trainCap == CAPACITY ) {
+			full.notify();
+		}
+	}
+
+	tryLeave() {
+		while(!unloadable) {
+			leaveCond.wait();
+		}
+		trainCap--;
+		if( trainCap == 0) {
+			empty.notify();
+		}
+	}
+
+	load() {
+		loadable = true;
+		boardCond.notifyAll();
+	}
+
+	tryRun() {
+		if(trainCap < CAPACITY) {
+			full.wait();
+		}
+		loadable = false;
+	}
+
+	unload() {
+		unloadable = true;
+		leaveCond.notifyAll();
+	}
+
+	finishUnload() {
+		while(trainCap > 0) {
+			empty.wait();
+		}
+		unloadable = false;
+	}
+}
+
+int CAPACITY, currCap = 0;
+RC rc;
+
+Passenger() {
+	while(true) {
+		rc.tryBoard();
+		board();
+
+		rc.tryLeave();
+		leave();
+	}
+}
+
+Train() {
+	while(true) {
+		rc.load();
+		load();
+
+		rc.tryRun();
+		run();
+
+		rc.unload();
+		unload();
+		rc.finishUnload();
+	}
+}
+
+--------------------------------SEMAPHORES--------------------------------------
+
+Semaphore x = 1, full = 0, empty = 0,boardCond = 0;
+int trainCap = 0;
+boolean hasWaiting = false;
+
+Passenger() {
+	while(true) {
+		x.wait();
+		boardCond.wait();
+		trainCap++;
+		if( trainCap == CAPACITY ) {
+			full.signal();
+		}
+		x.signal();
+		
+		board();
+		
+		y.wait();
+		leaveCond.wait();
+		trainCap--;
+		if( trainCap == 0) {
+			empty.signal();
+		}
+		y.signal();
+		leave();
+	}
+}
+
+Train() {
+	while(true) {
+		for(int i = 0; i < CAPACITY; i++) {
+			boardCond.signal();
+		}
+		load();
+
+		if(trainCap < CAPACITY) {
+			full.wait();
+		}
+		run();
+
+		for(int i = 0; i < CAPACITY; i++ ) {
+			leaveCond.signal();
+		}
+		unload();
+		if(trainCap > 0) {
+			empty.wait();
+		}
+	}
+}

@@ -1,0 +1,99 @@
+Monitor SB {
+	int queue = 0;
+	int MAX_QUEUE = 4;
+	boolean barbering = false;
+	boolean heyBarber = false;
+	Condition waitBarber;
+
+	boolean checkBarber() {
+		while(barbering) {
+			if(queue < MAX_QUEUE) {
+				queue++;
+				waitBarber.wait();
+				queue--;
+			} else {
+				return false;
+			}
+		}
+		barber.notify();
+		heyBarber = true;
+		barbering = true;
+		return true;
+	}
+
+	barberSleep() {
+		if( heyBarber) {
+			heyBarber = false;
+		} else {
+			barber.wait();
+		}
+	}
+
+	finishCut() {
+		barbering = false;
+		waitBarber.signal();
+	}
+}
+
+SB sb;
+
+Customer() {
+	while(true) {
+		if (sb.checkBarber()) {
+			getHaircut();
+		} else {
+			leave();
+		}
+	}
+}
+
+Barber() {
+	while(true) {
+		sb.barberSleep();
+		giveHaircut();
+		sb.finishCut();
+	}
+}
+
+--------------------------SEMAPHORES--------------------------------------------
+
+Semaphore x = 1, barber = 0, waitBarber = 1;
+boolean barbering = false;
+int queue = 0,
+	MAX_QUEUE = 4;
+
+Customer() {
+	while(true) {
+		boolean ok = true;
+		x.wait();
+		if(barbering) {
+			if(queue < MAX_QUEUE) {
+				queue++;
+				x.signal();
+				waitBarber.wait();
+				x.wait();
+				queue--;
+				barber.signal();
+				barbering = true;
+				ok = true;
+			} else {
+				ok = false;
+			}
+		}
+		x.signal();
+
+		if (ok) {
+			getHaircut();
+		} else {
+			leave();
+		}
+	}
+}
+
+Barber() {
+	while(true) {
+		barber.wait();
+		giveHaircut();
+		waitBarber.signal()
+	}
+}
