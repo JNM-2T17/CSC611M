@@ -1,0 +1,88 @@
+>>>>>>>>>>>>>>>>>> PROBLEM <<<<<<<<<<<<<<<<<<<
+
+Global - - - - - - - - - - - - - - - - - - - -
+
+capacity = c
+
+Passenger (multiple) - - - - - - - - - - - - -
+
+board() --> Only if the car calls load
+leave() --> Only if the car calls unload
+
+Car (single) - - - - - - - - - - - - - - - - -
+
+while(1){
+	load()
+	run() --> Only if the car is full
+	unload()
+}
+
+>>>>>>>>>>>>>>>>>> SOLUTION <<<<<<<<<<<<<<<<<<
+
+c = capacity
+
+Monitor m{
+	Cond loadQ,
+	     runQ,
+	     unloadQ
+	loaded    = 0
+	loading   = false
+	unloading = false
+
+	tryBoard(){
+		while(!loading){
+			loadQ.wait()
+		}
+		loaded++
+		if(loaded == c){
+			loading = false
+			runQ.notify()
+		}
+	}
+
+	startLoad(){
+		loading = true
+		loadQ.notifyAll()
+	}
+
+	tryRun(){
+		while(loaded < c){
+			runQ.wait()
+		}
+	}
+
+	startUnload(){
+		unloading = true
+		unloadQ.notifyAll()
+	}
+
+	tryLeave(){
+		while(!unloading){
+			unloadQ.wait()
+		}
+		loaded--
+		if(loaded == 0){
+			unloading = false
+		}
+	}
+
+
+}
+
+Passenger (multiple) - - - - - - - - - - - - -
+
+m.tryBoard()
+board() --> Only if the car calls load
+m.tryLeave()
+leave() --> Only if the car calls unload
+
+Car (single) - - - - - - - - - - - - - - - - -
+
+while(1){
+	m.startLoad()
+	load()
+	m.tryRun()
+	run() --> Only if the car is full
+	m.startUnload()
+	unload()
+}

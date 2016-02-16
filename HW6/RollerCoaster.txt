@@ -78,7 +78,7 @@ Train() {
 
 --------------------------------SEMAPHORES--------------------------------------
 
-Semaphore x = 1, full = 0, empty = 0,boardCond = 0;
+Semaphore x = 1, full = 0, empty = 0,boardCond = 0, leaveCond = 0;
 int trainCap = 0;
 boolean hasWaiting = false;
 
