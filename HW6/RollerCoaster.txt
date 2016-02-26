@@ -39,9 +39,6 @@ Monitor RC {
 	unload() {
 		unloadable = true;
 		leaveCond.notifyAll();
-	}
-
-	finishUnload() {
 		while(trainCap > 0) {
 			empty.wait();
 		}
@@ -64,15 +61,14 @@ Passenger() {
 
 Train() {
 	while(true) {
-		rc.load();
 		load();
-
+		rc.load();
+		
 		rc.tryRun();
 		run();
 
-		rc.unload();
 		unload();
-		rc.finishUnload();
+		rc.unload();
 	}
 }
 
@@ -107,20 +103,20 @@ Passenger() {
 
 Train() {
 	while(true) {
+		load();
 		for(int i = 0; i < CAPACITY; i++) {
 			boardCond.signal();
 		}
-		load();
-
+		
 		if(trainCap < CAPACITY) {
 			full.wait();
 		}
 		run();
 
+		unload();
 		for(int i = 0; i < CAPACITY; i++ ) {
 			leaveCond.signal();
 		}
-		unload();
 		if(trainCap > 0) {
 			empty.wait();
 		}
