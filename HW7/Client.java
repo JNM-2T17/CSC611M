@@ -29,7 +29,7 @@ public class Client {
             name = args[1];
             din = new DataInputStream(s.getInputStream());
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF(name+"\0");
+            dout.writeUTF(name);
 
             new Thread(new ClientReceiveThread()).start();
             while(!start);
@@ -48,7 +48,7 @@ public class Client {
             try {
                 while(true){            
                     String msgin = din.readUTF();
-                    if("OK\0".equals(msgin)){
+                    if("OK".equals(msgin)){
                         start = true;
                     } else {
                         System.out.println(msgin);
@@ -72,7 +72,7 @@ public class Client {
                 try {
                     msgout = br.readLine();
                     if("end".equals(msgout)) break;
-                    dout.writeUTF(name+": "+msgout+"\0");
+                    dout.writeUTF(msgout);
                 } catch (IOException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }

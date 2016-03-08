@@ -34,7 +34,7 @@ public class Server {
 	public void start() {
 		signUp();
 		for( User u: users) {
-			sendMessage(u.getSocket(),"OK\0");
+			sendMessage(u.getSocket(),"OK");
 		}
 		serve();
 	}
@@ -99,7 +99,7 @@ public class Server {
 	public void sendMessage(Socket s,String message) {
 		try {
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-			dos.writeUTF(message + "\0");
+			dos.writeUTF(message);
 			dos.close();
 			s.close();
 		} catch( IOException ioe ) {
