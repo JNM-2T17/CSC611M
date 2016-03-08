@@ -21,21 +21,25 @@ public class Client {
     static DataInputStream din;
     static DataOutputStream dout;
     static boolean start = false;
-    static boolean terminate = false;
+    static ServerSocket ss;
+	static String ip;
     
     public static void main(String[] args) {
         try{
-            s = new Socket(args[0], 6969); //server ip and port
-            name = args[1];
+			ip = args[0];
+            s = new Socket(ip, 6969); //server ip and port
+            ss = new ServerSocket(6969);
+			name = args[1];
             din = new DataInputStream(s.getInputStream());
             dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF(name+"\0");
+			dout.close();
+			s.close();
 
             new Thread(new ClientReceiveThread()).start();
             while(!start);
             new Thread(new ClientSendThread()).start();
             
-            while(!terminate);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -46,7 +50,9 @@ public class Client {
         @Override
         public void run() {
             try {
-                while(true){            
+                while(true){
+					Socket s = ss.accept();
+					din = new DataInputStream(s.getInputStream());
                     String msgin = din.readUTF();
                     if("OK\0".equals(msgin)){
                         start = true;
@@ -71,13 +77,15 @@ public class Client {
             while(true){
                 try {
                     msgout = br.readLine();
-                    if("end".equals(msgout)) break;
+					s = new Socket(ip, 6969);
+					dout = new DataOutputStream(s.getOutputStream());
                     dout.writeUTF(name+": "+msgout+"\0");
+					dout.close();
+					s.close();					
                 } catch (IOException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            terminate = true;
         }
         
     }

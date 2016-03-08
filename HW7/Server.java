@@ -47,15 +47,6 @@ public class Server {
 				String ip = curr.getInetAddress().getHostAddress();
 				DataInputStream dis = new DataInputStream(curr.getInputStream());
 				String message = dis.readUTF();
-				// char c;
-				// do {
-				// 	c = (char)dis.readUnsignedByte();
-				// 	if( c != '\0') {
-				// 		message += c;
-				// 	} else {
-				// 		break;
-				// 	}
-				// } while( true );
 				System.out.println("GOT " + message);
 				for( User u : users ) {
 					if( !u.ip().equals(ip) ) {
@@ -78,15 +69,6 @@ public class Server {
 				String ip = curr.getInetAddress().getHostAddress();
 				DataInputStream dis = new DataInputStream(curr.getInputStream());
 				String name = dis.readUTF();
-				// char c;
-				// do {
-				// 	c = (char)dis.readUnsignedByte();
-				// 	if( c != '\0') {
-				// 		name += c;
-				// 	} else {
-				// 		break;
-				// 	}
-				// } while( true );
 				System.out.println(name + " signed in");
 				users[i] = new User(name, ip);
 				i++;
