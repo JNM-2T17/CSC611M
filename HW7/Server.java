@@ -57,9 +57,16 @@ public class Server {
 				// 	}
 				// } while( true );
 				System.out.println("GOT " + message);
+				String name = "";
+				for( User u : users ) {
+					if( u.ip().equals(ip)) {
+						name = u.name();
+						break;
+					}
+				}
 				for( User u : users ) {
 					if( !u.ip().equals(ip) ) {
-						sendMessage(u.getSocket(),u.name() + ": " + message);
+						sendMessage(u.getSocket(),name + ": " + message);
 					}
 				}
 			} catch( IOException ioe ) {
