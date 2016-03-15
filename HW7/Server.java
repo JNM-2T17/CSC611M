@@ -85,7 +85,7 @@ public class Server {
 					}
 					message += c;
 					if( end == 4 ) {
-						System.out.println(message);
+						System.out.println("THIS IS THE MESSAGE: " + message);
 						if(message.split(" ")[0].equals("POST")) {
 							type = "POST";
 							String[] parts = message.split("\n");
@@ -109,63 +109,83 @@ public class Server {
 						}
 					} 
 				} while( end < 4 );
-				String fn = message.split(" ")[1].substring(1);
-
-				String[] parts = fn.split("\\?");
-				fn = parts[0];
-				String[] paramsStr = new String[0];
-				if( post.length() > 0 ) {
-					paramsStr = post.split("&");
-				} else if( parts.length > 1 ) {
-					paramsStr = parts[1].split("&");
-				}
-
-				for( String s: paramsStr) {
-					String[] par = s.split("=");
-					params.put(par[0],par.length == 1 ? "" : par[1]);
-					System.out.println("putting " + par[0] + " -> " 
-										+ (par.length == 1 ? "" : par[1]));
-				}
-				
-				String reply = "HTTP/1.1 200 OK\n" + 
-								"Date: Mon, 23 May 2005 22:38:34 GMT\n" + 
-								"Content-Type: text/html; charset=UTF-8\n" + 
-								"Content-Encoding: UTF-8\n";
-				String content = "";
 				try {
-					if( type.equals("POST") && fn.equals("Gradebook.txt")) {
-						PrintWriter pw = new PrintWriter(
-											new FileWriter(
-												new File("Gradebook.txt")));
-						pw.print(params.get("gb"));
-						pw.close();
-					} else {
-						BufferedReader br = new BufferedReader(
-												new FileReader(
-													new File(fn)));
-						String s;
-						do {
-							s = br.readLine();
-							if( s != null) {
-								content += s + "\n";
-							} else {
-								break;
-							}
-						} while(true);
-						br.close();
-					}
+					if( message.length() > 0 ) {
+						String fn = message.split(" ")[1].substring(1);
 
-					reply += "Content-Length: " + content.length() + "\n" + 
-								"Server: Java/1.0 (Unix)\n" + 
-								"ETag: \"3f80f-1b6-3e1cb03b\"\n" + 
-								"Accept-Ranges: bytes\n" + 
-								"Connection: close\n\n" + content;
-					DataOutputStream dos 
-						= new DataOutputStream(curr.getOutputStream());
-					// System.out.println(reply);
-					dos.writeBytes(reply);
-					dos.flush();
-					dos.close();
+						String[] parts = fn.split("\\?");
+						fn = parts[0];
+						String[] paramsStr = new String[0];
+						if( post.length() > 0 ) {
+							paramsStr = post.split("&");
+						} else if( parts.length > 1 ) {
+							paramsStr = parts[1].split("&");
+						}
+
+						for( String s: paramsStr) {
+							String[] par = s.split("=");
+							params.put(par[0],par.length == 1 ? "" : par[1]);
+							System.out.println("putting " + par[0] + " -> " 
+												+ (par.length == 1 ? "" : par[1]));
+						}
+
+					
+						String reply = "HTTP/1.1 200 OK\n" + 
+										"Date: Mon, 23 May 2005 22:38:34 GMT\n" + 
+										"Content-Type: text/html; charset=UTF-8\n" + 
+										"Content-Encoding: UTF-8\n";
+						String content = "";
+						
+						if( type.equals("POST") && fn.equals("Gradebook.txt")) {
+							PrintWriter pw = new PrintWriter(
+												new FileWriter(
+													new File("Gradebook.txt")));
+							pw.print(params.get("gb"));
+							pw.close();
+						} else {
+							BufferedReader br = new BufferedReader(
+													new FileReader(
+														new File(fn)));
+							String s;
+							do {
+								s = br.readLine();
+								if( s != null) {
+									content += s + "\n";
+								} else {
+									break;
+								}
+							} while(true);
+							br.close();
+						}
+
+						reply += "Content-Length: " + content.length() + "\n" + 
+									"Server: Java/1.0 (Unix)\n" + 
+									"ETag: \"3f80f-1b6-3e1cb03b\"\n" + 
+									"Accept-Ranges: bytes\n" + 
+									"Connection: close\r\n\n\n" + content;
+						DataOutputStream dos 
+							= new DataOutputStream(curr.getOutputStream());
+						// System.out.println(reply);
+						dos.writeBytes(reply);
+						dos.flush();
+						dos.close();
+					} else {
+						DataOutputStream dos 
+							= new DataOutputStream(curr.getOutputStream());
+						// System.out.println(reply);
+						dos.writeBytes("HTTP/1.1 200 OK\n" + 
+									"Date: Mon, 23 May 2005 22:38:34 GMT\n" + 
+									"Content-Type: text/html; charset=UTF-8\n" + 
+									"Content-Encoding: UTF-8\n" + 
+									"Content-Length: 0\n" + 
+									"Server: Java/1.0 (Unix)\n" + 
+									"ETag: \"3f80f-1b6-3e1cb03b\"\n" + 
+									"Accept-Ranges: bytes\n" + 
+									"Connection: close\r\n\n\n"
+									);
+						dos.flush();
+						dos.close();
+					}
 				} catch(IOException ioe) {}
 				
 				curr.close();

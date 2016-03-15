@@ -348,6 +348,16 @@
 					}
 				});
 			}
+
+			$.ajax({
+				url : "test",
+				method : "POST",
+				data : {
+					test : [
+					"try1","try2","try3"
+					]
+				}
+			})
 		</script>
 		<div id="screen">
 			<button onClick="saveFile();">SAVE</button>
