@@ -29,15 +29,14 @@ public class Browser {
 								"Accept-Encoding: gzip, deflate" + 
 								"User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12";
 			final int port = Integer.parseInt(requestParams[1]);
-			Socket s = new Socket(requestParams[0],port);
+			final Socket s = new Socket(requestParams[0],port);
 
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.writeBytes(request);
 			(new Thread(new Runnable() {
 				public void run() {
 					try {
-						ServerSocket ss = new ServerSocket(port);
-						Socket curr = ss.accept();
+						Socket curr = s;
 						String ip = curr.getInetAddress().getHostAddress();
 						System.out.println("CONNECTED TO " + ip);
 						DataInputStream dis = new DataInputStream(curr.getInputStream());
