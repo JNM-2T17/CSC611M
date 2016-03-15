@@ -38,6 +38,7 @@ public class Client {
 
             new Thread(new ClientReceiveThread()).start();
             while(!start);
+			System.out.println("Hello World");
             new Thread(new ClientSendThread()).start();
             
         }catch(Exception e){
