@@ -20,7 +20,7 @@ public class Client {
     static Socket s;
     static DataInputStream din;
     static DataOutputStream dout;
-    static boolean start = false;
+    static volatile boolean start = false;
     static ServerSocket ss;
 	static String ip;
     
@@ -32,7 +32,7 @@ public class Client {
 			name = args[1];
             din = new DataInputStream(s.getInputStream());
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF(name+"\0");
+            dout.writeUTF(name);
 			dout.close();
 			s.close();
 
@@ -54,8 +54,9 @@ public class Client {
 					Socket s = ss.accept();
 					din = new DataInputStream(s.getInputStream());
                     String msgin = din.readUTF();
-                    if("OK\0".equals(msgin)){
-                        start = true;
+                    if("OK".equals(msgin)){
+						goodToGo();
+						System.out.println("We're good to go!");
                     } else {
                         System.out.println(msgin);
                     }
@@ -66,6 +67,10 @@ public class Client {
         }
         
     }
+	
+	public static synchronized void goodToGo(){
+		start = true;
+	}
     
     public static class ClientSendThread implements Runnable {
 
@@ -73,13 +78,12 @@ public class Client {
         public void run() {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String msgout="";
-            System.out.println("Try typing");
             while(true){
                 try {
                     msgout = br.readLine();
 					s = new Socket(ip, 6969);
 					dout = new DataOutputStream(s.getOutputStream());
-                    dout.writeUTF(name+": "+msgout+"\0");
+                    dout.writeUTF(msgout);
 					dout.close();
 					s.close();					
                 } catch (IOException ex) {
