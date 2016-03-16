@@ -41,7 +41,6 @@ public class Browser {
 						System.out.println("CONNECTED TO " + ip);
 						DataInputStream dis = new DataInputStream(curr.getInputStream());
 						String message = "";
-						String post = "";
 						char c;
 						int end = 0;
 						do {
@@ -95,11 +94,17 @@ public class Browser {
 										break;
 									}
 								}
-								for(int i = 0; i < length; i++) {
-									post += (char)dis.readUnsignedByte();
-								}
-								post = URLDecoder.decode(post,"UTF-8");
-								System.out.println(post);
+								byte[] post = new byte[length];
+								int current = 0;
+								int read;
+								do {
+									read = dis.read(post,current,length - current);
+									if( read >= 0 ) {
+										current += read;
+									}
+								} while( read != -1 && current < length);
+								// post = URLDecoder.decode(post,"UTF-8");
+								System.out.println(new String(post));
 							} 
 						} while( end < 4 );
 					} catch(Exception e) {
