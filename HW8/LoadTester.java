@@ -4,8 +4,8 @@ import java.io.*;
 
 
 public class LoadTester {
-	private static volatile time = 0;
-	private static volatile count = 0;
+	private static volatile long time = 0;
+	private static volatile long count = 0;
 
 	private Scanner sc;
 	public static void main(String[] args) {
@@ -17,11 +17,11 @@ public class LoadTester {
 		}
 	}
 
-	public static synchronized upadteAvg(long time) {
+	public static synchronized void updateAvg(long time) {
 		LoadTester.time += time;
 		count++;
 		System.out.println("Avg Time: " + (LoadTester.time / count / 1000.0) 
-							+ " from " + count + "connections");
+							+ " from " + count + " connections");
 	}
 
 	public LoadTester() {
@@ -136,6 +136,7 @@ public class LoadTester {
 							// post = URLDecoder.decode(post,"UTF-8");
 							// System.out.println(new String(post));
 							time = System.currentTimeMillis() - time;
+							LoadTester.updateAvg(time);
 							System.out.println("OK");
 						} 
 					} while( end < 4 );
