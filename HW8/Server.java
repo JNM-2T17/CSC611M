@@ -180,39 +180,30 @@ public class Server {
 										"Date: Mon, 23 May 2005 22:38:34 GMT\r\n" + 
 										"Content-Type: text/html; charset=UTF-8\r\n" + 
 										"Content-Encoding: UTF-8\r\n";
-						String content = "";
 						
-						if( type.equals("POST") && fn.equals("Gradebook.txt")) {
-							PrintWriter pw = new PrintWriter(
-												new FileWriter(
-													new File("Gradebook.txt")));
-							pw.print(params.get("gb"));
-							pw.close();
-						} else {
-							BufferedReader br = new BufferedReader(
-													new FileReader(
-														new File(fn)));
-							String s;
-							do {
-								s = br.readLine();
-								if( s != null) {
-									content += s + "\n";
-								} else {
-									break;
-								}
-							} while(true);
-							br.close();
-						}
+						int length = 1024;
+						File file = new File(fn);
+						DataInputStream is = new DataInputStream(new FileInputStream(file));
+						byte[] fileInput = new byte[length];
+						int current = 0;
+						int read;
 
-						reply += "Content-Length: " + content.length() + "\r\n" + 
+						reply += "Content-Length: " + file.length() + "\r\n" + 
 									"Server: Java/1.0 (Unix)\r\n" + 
 									"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
 									"Accept-Ranges: bytes\r\n" + 
-									"Connection: close\r\n\r\n" + content;
+									"Connection: close\r\n\r\n";
 						DataOutputStream dos 
 							= new DataOutputStream(curr.getOutputStream());
-						// System.out.println(reply);
-						dos.writeBytes(reply);
+						
+						do{
+							read = is.read(fileInput,current,length);
+							if( read >= 0 ) {
+								current += read;
+							}
+							dos.write(fileInput,0,read);
+						} while(current < file.length());
+						
 						dos.flush();
 						dos.close();
 					} else {
