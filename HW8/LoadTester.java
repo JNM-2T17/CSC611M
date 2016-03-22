@@ -4,6 +4,9 @@ import java.io.*;
 
 
 public class LoadTester {
+	private static volatile time = 0;
+	private static volatile count = 0;
+
 	private Scanner sc;
 	public static void main(String[] args) {
 		LoadTester b = new LoadTester();
@@ -12,6 +15,13 @@ public class LoadTester {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static synchronized upadteAvg(long time) {
+		LoadTester.time += time;
+		count++;
+		System.out.println("Avg Time: " + (LoadTester.time / count / 1000.0) 
+							+ " from " + count + "connections");
 	}
 
 	public LoadTester() {
@@ -40,7 +50,7 @@ public class LoadTester {
 	}
 
 	public void processRequest(String[] requestParams) throws Exception {
-		String request = "GET " + requestParams[2] + " HTTP/1.1\n" + 
+		final String request = "GET " + requestParams[2] + " HTTP/1.1\n" + 
 							"Host: 192.168.8.105\n" + 
 							"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n" + 
 							"Accept-Language: en-us\n" + 
@@ -50,11 +60,12 @@ public class LoadTester {
 		final int port = Integer.parseInt(requestParams[1]);
 		final Socket s = new Socket(requestParams[0],port);
 
-		DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-		dos.writeBytes(request);
 		(new Thread(new Runnable() {
 			public void run() {
 				try {
+					DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+					long time = System.currentTimeMillis();
+					dos.writeBytes(request);
 					Socket curr = s;
 					String ip = curr.getInetAddress().getHostAddress();
 					System.out.println("CONNECTED TO " + ip);
@@ -124,6 +135,7 @@ public class LoadTester {
 							} while( read != -1 && current < length);
 							// post = URLDecoder.decode(post,"UTF-8");
 							// System.out.println(new String(post));
+							time = System.currentTimeMillis() - time;
 							System.out.println("OK");
 						} 
 					} while( end < 4 );
