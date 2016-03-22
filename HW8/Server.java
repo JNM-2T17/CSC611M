@@ -47,6 +47,7 @@ public class Server {
 		int i = 0;
 		while(true) {
 			try {
+				System.out.println("Waiting");
 				curr = ss.accept();
 				System.out.println("CONNECTED TO " + curr.getInetAddress().getHostAddress());
 				processors[i].addSocket(curr);
@@ -57,7 +58,7 @@ public class Server {
 		}
 	}
 
-	class ProcessThread implements Runnable {
+	class ProcessThread extends Thread {
 		private Stack<Socket> sockets;
 
 		public ProcessThread() {
@@ -71,7 +72,11 @@ public class Server {
 
 		public synchronized void tryProcess() {
 			while(sockets.size() == 0 ) {
-				wait();
+				try {
+					wait();
+				} catch( Exception e) {
+					e.printStackTrace();
+				}
 			}
 			Socket s = sockets.pop();
 			process(s);
