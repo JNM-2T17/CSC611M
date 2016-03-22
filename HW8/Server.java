@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 public class Server {
 	private ServerSocket ss;
+	private ProcessThread[] processors;
 
 	public static void main(String[] args) {
 		Server s = new Server();
@@ -30,7 +31,11 @@ public class Server {
 	public Server() {
 		try {
 			ss = new ServerSocket(8081);
-		} catch( IOException ioe ) {
+			processors = new ProcessThread[8];
+			for(int i = 0; i < 8; i++ ) {
+				processors[i] = new ProcessThread();
+			}
+ 		} catch( IOException ioe ) {
 			ioe.printStackTrace();
 		}
 	}
@@ -39,61 +44,46 @@ public class Server {
 		Socket curr;
 		SpawnThread st = new SpawnThread();
 		st.start();
+		int i = 0;
 		while(true) {
 			try {
 				curr = ss.accept();
 				System.out.println("CONNECTED TO " + curr.getInetAddress().getHostAddress());
-				st.sendRequest(curr);
+				processors[i].addSocket(curr);
+				i = (i + 1) % processors.length;
 			} catch(IOException ioe) {
 				ioe.printStackTrace();
 			}
 		}
 	}
 
-	class SpawnThread extends Thread {
-		private ArrayList<Socket> queue;
+	class ProcessThread implements Runnable {
+		private Stack<Socket> sockets;
 
-		public SpawnThread() {
-			queue = new ArrayList<Socket>();
+		public ProcessThread() {
+			sockets = new Stack<Socket>();
+		}
+
+		public synchronized void addSocket(Socket s) {
+			sockets.push(s);
+			notifyAll();
+		}
+
+		public synchronized void tryProcess() {
+			while(sockets.size() == 0 ) {
+				wait();
+			}
+			Socket s = sockets.pop();
+			process(s);
 		}
 
 		public void run() {
 			while(true) {
-				receive();
+				tryProcess();
 			}
 		}
 
-		public synchronized void sendRequest(Socket s) {
-			queue.add(s);
-			System.out.println("Sending Request of " + s.getInetAddress().getHostAddress());
-			notifyAll();
-		}
-
-		public synchronized void receive() {
-			if( queue.size() == 0 ) {
-				try {
-					System.out.println("Waiting");
-					wait();
-				} catch(InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-			for( Socket s : queue ) {
-				System.out.println("Processing " + s);
-				(new Thread(new ProcessThread(s))).start();
-			}
-			queue = new ArrayList<Socket>();
-		}
-	}
-
-	class ProcessThread implements Runnable {
-		private Socket curr;
-
-		public ProcessThread(Socket c) {
-			curr = c;
-		}
-
-		public void run() {
+		public void process(Socket curr) {
 			try {
 				String ip = curr.getInetAddress().getHostAddress();
 				System.out.println("PROCESSING " + ip);
