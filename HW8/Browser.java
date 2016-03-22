@@ -21,13 +21,13 @@ public class Browser {
 	public void start() throws Exception {
 		while(true) {
 			String[] requestParams = getInput();
-			String request = "GET " + requestParams[2] + " HTTP/1.1" + 
-								"Host: 192.168.8.105" + 
-								"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" + 
-								"Accept-Language: en-us" + 
-								"Connection: keep-alive" + 
-								"Accept-Encoding: gzip, deflate" + 
-								"User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12";
+			String request = "GET " + requestParams[2] + " HTTP/1.1\n" + 
+								"Host: 192.168.8.105\n" + 
+								"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n" + 
+								"Accept-Language: en-us\n" + 
+								"Connection: keep-alive\n" + 
+								"Accept-Encoding: gzip, deflate\n" + 
+								"User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12\r\n\r\n";
 			final int port = Integer.parseInt(requestParams[1]);
 			final Socket s = new Socket(requestParams[0],port);
 
@@ -41,7 +41,6 @@ public class Browser {
 						System.out.println("CONNECTED TO " + ip);
 						DataInputStream dis = new DataInputStream(curr.getInputStream());
 						String message = "";
-						String post = "";
 						char c;
 						int end = 0;
 						do {
@@ -95,11 +94,17 @@ public class Browser {
 										break;
 									}
 								}
-								for(int i = 0; i < length; i++) {
-									post += (char)dis.readUnsignedByte();
-								}
-								post = URLDecoder.decode(post,"UTF-8");
-								System.out.println(post);
+								byte[] post = new byte[length];
+								int current = 0;
+								int read;
+								do {
+									read = dis.read(post,current,length - current);
+									if( read >= 0 ) {
+										current += read;
+									}
+								} while( read != -1 && current < length);
+								// post = URLDecoder.decode(post,"UTF-8");
+								System.out.println(new String(post));
 							} 
 						} while( end < 4 );
 					} catch(Exception e) {

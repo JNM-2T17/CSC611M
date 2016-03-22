@@ -15,6 +15,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Server {
@@ -36,11 +37,66 @@ public class Server {
 
 	public void start() {
 		Socket curr;
+		SpawnThread st = new SpawnThread();
+		st.start();
 		while(true) {
 			try {
 				curr = ss.accept();
+				System.out.println("CONNECTED TO " + curr.getInetAddress().getHostAddress());
+				st.sendRequest(curr);
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+	}
+
+	class SpawnThread extends Thread {
+		private ArrayList<Socket> queue;
+
+		public SpawnThread() {
+			queue = new ArrayList<Socket>();
+		}
+
+		public void run() {
+			while(true) {
+				receive();
+			}
+		}
+
+		public synchronized void sendRequest(Socket s) {
+			queue.add(s);
+			System.out.println("Sending Request of " + s.getInetAddress().getHostAddress());
+			notifyAll();
+		}
+
+		public synchronized void receive() {
+			if( queue.size() == 0 ) {
+				try {
+					System.out.println("Waiting");
+					wait();
+				} catch(InterruptedException ie) {
+					ie.printStackTrace();
+				}
+			}
+			for( Socket s : queue ) {
+				System.out.println("Processing " + s);
+				(new Thread(new ProcessThread(s))).start();
+			}
+			queue = new ArrayList<Socket>();
+		}
+	}
+
+	class ProcessThread implements Runnable {
+		private Socket curr;
+
+		public ProcessThread(Socket c) {
+			curr = c;
+		}
+
+		public void run() {
+			try {
 				String ip = curr.getInetAddress().getHostAddress();
-				System.out.println("CONNECTED TO " + ip);
+				System.out.println("PROCESSING " + ip);
 				DataInputStream dis = new DataInputStream(curr.getInputStream());
 				String message = "";
 				String post = "";
@@ -130,10 +186,10 @@ public class Server {
 						}
 
 					
-						String reply = "HTTP/1.1 200 OK\n" + 
-										"Date: Mon, 23 May 2005 22:38:34 GMT\n" + 
-										"Content-Type: text/html; charset=UTF-8\n" + 
-										"Content-Encoding: UTF-8\n";
+						String reply = "HTTP/1.1 200 OK\r\n" + 
+										"Date: Mon, 23 May 2005 22:38:34 GMT\r\n" + 
+										"Content-Type: text/html; charset=UTF-8\r\n" + 
+										"Content-Encoding: UTF-8\r\n";
 						String content = "";
 						
 						if( type.equals("POST") && fn.equals("Gradebook.txt")) {
@@ -158,11 +214,11 @@ public class Server {
 							br.close();
 						}
 
-						reply += "Content-Length: " + content.length() + "\n" + 
-									"Server: Java/1.0 (Unix)\n" + 
-									"ETag: \"3f80f-1b6-3e1cb03b\"\n" + 
-									"Accept-Ranges: bytes\n" + 
-									"Connection: close\r\n\n\n" + content;
+						reply += "Content-Length: " + content.length() + "\r\n" + 
+									"Server: Java/1.0 (Unix)\r\n" + 
+									"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
+									"Accept-Ranges: bytes\r\n" + 
+									"Connection: close\r\n\r\n" + content;
 						DataOutputStream dos 
 							= new DataOutputStream(curr.getOutputStream());
 						// System.out.println(reply);
@@ -181,7 +237,7 @@ public class Server {
 									"Server: Java/1.0 (Unix)\n" + 
 									"ETag: \"3f80f-1b6-3e1cb03b\"\n" + 
 									"Accept-Ranges: bytes\n" + 
-									"Connection: close\r\n\n\n"
+									"Connection: close\r\n\r\n"
 									);
 						dos.flush();
 						dos.close();
