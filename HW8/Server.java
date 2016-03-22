@@ -186,9 +186,10 @@ public class Server {
 										"Content-Type: text/html; charset=UTF-8\r\n" + 
 										"Content-Encoding: UTF-8\r\n";
 						
-						int length = 1024;
+						int length = 32768;
 						File file = new File(fn);
-						DataInputStream is = new DataInputStream(new FileInputStream(file));
+						DataInputStream is = new DataInputStream(
+													new FileInputStream(file));
 						byte[] fileInput = new byte[length];
 						int current = 0;
 						int read;
@@ -200,9 +201,11 @@ public class Server {
 									"Connection: close\r\n\r\n";
 						DataOutputStream dos 
 							= new DataOutputStream(curr.getOutputStream());
-						
+						dos.writeBytes(reply);
 						do{
-							read = is.read(fileInput,current,length);
+							read = is.read(fileInput,0
+											,(int)Math.min(length
+												,file.length() - current));
 							if( read >= 0 ) {
 								current += read;
 							}
