@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Server {
 	private ServerSocket ss;
@@ -34,6 +35,7 @@ public class Server {
 			processors = new ProcessThread[8];
 			for(int i = 0; i < 8; i++ ) {
 				processors[i] = new ProcessThread();
+				processors[i].start();
 			}
  		} catch( IOException ioe ) {
 			ioe.printStackTrace();
@@ -42,8 +44,6 @@ public class Server {
 
 	public void start() {
 		Socket curr;
-		SpawnThread st = new SpawnThread();
-		st.start();
 		int i = 0;
 		while(true) {
 			try {
@@ -210,14 +210,14 @@ public class Server {
 						DataOutputStream dos 
 							= new DataOutputStream(curr.getOutputStream());
 						// System.out.println(reply);
-						dos.writeBytes("HTTP/1.1 200 OK\n" + 
-									"Date: Mon, 23 May 2005 22:38:34 GMT\n" + 
-									"Content-Type: text/html; charset=UTF-8\n" + 
-									"Content-Encoding: UTF-8\n" + 
-									"Content-Length: 0\n" + 
-									"Server: Java/1.0 (Unix)\n" + 
-									"ETag: \"3f80f-1b6-3e1cb03b\"\n" + 
-									"Accept-Ranges: bytes\n" + 
+						dos.writeBytes("HTTP/1.1 200 OK\r\n" + 
+									"Date: Mon, 23 May 2005 22:38:34 GMT\r\n" + 
+									"Content-Type: text/html; charset=UTF-8\r\n" + 
+									"Content-Encoding: UTF-8\r\n" + 
+									"Content-Length: 0\r\n" + 
+									"Server: Java/1.0 (Unix)\r\n" + 
+									"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
+									"Accept-Ranges: bytes\r\n" + 
 									"Connection: close\r\n\r\n"
 									);
 						dos.flush();
