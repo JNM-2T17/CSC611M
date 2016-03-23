@@ -1,0 +1,113 @@
+<html>
+	<head>
+		<title>Sheep Simulator</title>
+		<script src="jquery.min.js"></script>
+	</head>
+	<body>
+		<script>
+			var id;
+			var sheep;
+			var done = false;
+			var interval;
+
+			$(document).ready(function() {
+				console.log("Trying");
+				$.ajax({
+					url:"sheep",
+					dataType : "json",
+					success : function(a) {
+						console.log(a);
+						id = a.id;
+						setModel(a.map);
+						sheep = a.sheep; //please display the sheep somehow
+					}
+				});
+
+				interval = setInterval(function() {
+					if(!done) {
+						$.ajax({
+							url:"sheep",
+							method: "POST",
+							dataType : "json",
+							data : {
+								request : "update"
+							},
+							success : function(a) {
+								console.log(a);
+								setModel(a.map);
+								sheep = a.sheep; //please display the sheep somehow
+								done = a.done === "true";
+							}
+						});
+					} else {
+						clearInterval(interval);
+					}
+				},1000);
+			});
+
+			function setModel(map) {
+				var rows = map.split("\n");
+				var html = "";
+				for(x in rows) {
+					html += "<div>";
+					for(i = 0; i < rows[x].length; i++) {
+						html += rows[x].substring(i, i + 1);//replace this with the tile
+					}
+
+					html += "</div>";
+				}
+				$("#field").html(html);
+			}
+
+			function move(dir) {
+				if( !done ) {
+					$.ajax({
+						url:"sheep",
+						method: "POST",
+						dataType : "json",
+						data : {
+							request : "move",
+							id : id,
+							dir : dir
+						},
+						success : function(a) {
+							console.log(a);
+							setModel(a.map);
+							sheep = a.sheep; //please display the sheep somehow
+							done = a.done === "true";
+						}
+					});
+				}
+			}
+
+			function eat() {
+				if( !done ) {
+					$.ajax({
+						url:"sheep",
+						method: "POST",
+						dataType : "json",
+						data : {
+							request : "eat",
+							id : id,
+						},
+						success : function(a) {
+							console.log(a);
+							setModel(a.map);
+							sheep = a.sheep; //please display the sheep somehow
+							done = a.done === "true";
+						}
+					});
+				}
+			}
+
+
+		</script>
+		<div id="field"></div>
+		<button onClick="move('U');">Up</button>
+		<button onClick="move('D');">Down</button>
+		<button onClick="move('L');">Left</button>
+		<button onClick="move('R');">Right</button>
+		<button onClick="eat();">Eat</button>
+
+	</body>
+</html>
