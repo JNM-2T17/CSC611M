@@ -101,4 +101,22 @@ public class Map {
 		}
 		return ret;
 	}
+
+	public String toString(String index) {
+		Sheep s = sheep.get(Integer.parseInt(index));
+		String ret = "";
+		for(int i = 0; i < map.length; i++) {
+			if( i > 0 ) {
+				ret += "\\n";
+			}
+			for(int j = 0; j < map.length; j++ ) {
+				if( i == s.y() && j == s.x() ) {
+					ret += map[i][j].hasGrass() ? "X" : "x";
+				} else {
+					ret += map[i][j].toString();
+				}
+			}
+		}
+		return ret;
+	}
 }

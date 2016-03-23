@@ -163,7 +163,8 @@ public class Server {
 				} while( end < 4 );
 				try {
 					if( message.length() > 0 ) {
-						String fn = message.split(" ")[1].substring(1);
+						String fn = URLDecoder.decode(
+										message.split(" ")[1].substring(1));
 
 						String[] parts = fn.split("\\?");
 						fn = parts[0];
@@ -182,7 +183,7 @@ public class Server {
 						}
 
 						String replyContent = "";
-
+						byte[] replyBytes;
 						switch(type) {
 							case "GET":
 								if(!fn.equals("sheep")) {
@@ -195,6 +196,20 @@ public class Server {
 										int current = 0;
 										int read;
 
+										DataOutputStream dos 
+											= new DataOutputStream(curr.getOutputStream());
+										String reply = "HTTP/1.1 200 OK\r\n" + 
+														"Date: Mon, 23 May 2005 22:38:34 GMT\r\n" + 
+														"Content-Type: text/html; charset=UTF-8\r\n" + 
+														"Content-Encoding: UTF-8\r\n" +
+														"Content-Length: " + file.length() +
+														"\r\n" + 
+														"Server: Java/1.0 (Unix)\r\n" + 
+														"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
+														"Accept-Ranges: bytes\r\n" + 
+														"Connection: close\r\n\r\n";
+										// System.out.println(reply);
+										dos.writeBytes(reply);
 										do{
 											read = is.read(fileInput,0
 															,(int)Math.min(length
@@ -202,15 +217,19 @@ public class Server {
 											if( read >= 0 ) {
 												current += read;
 											}
-											replyContent += (new String(fileInput))
-																.substring(0,read);
+											dos.write(fileInput,0,read);
 										} while(current < file.length());
+										dos.flush();
+										dos.close();
 									} catch( IOException ioe ) {
 
+									} finally {
+										return;
 									}
 								} else {
-									replyContent = "{\"id\":\"" + field.spawnSheep() 
-											+ "\",\"map\":\"" + field.toString() 
+									String id = field.spawnSheep();
+									replyContent = "{\"id\":\"" + id
+											+ "\",\"map\":\"" + field.toString(id) 
 											+ "\",\"sheep\":" + field.sheep() + "}";
 								}
 								break;
@@ -227,7 +246,8 @@ public class Server {
 										break;
 									default:
 								}
-								replyContent = "{\"map\":\"" + field.toString() 
+
+								replyContent = "{\"map\":\"" + field.toString(id) 
 											+ "\",\"sheep\":" + field.sheep() 
 											+ ",\"done\":\"" + field.done() + "\"}";
 								break;

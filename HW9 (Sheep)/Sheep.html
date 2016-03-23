@@ -30,7 +30,8 @@
 							method: "POST",
 							dataType : "json",
 							data : {
-								request : "update"
+								request : "update",
+								id : id
 							},
 							success : function(a) {
 								console.log(a);
@@ -108,6 +109,5 @@
 		<button onClick="move('L');">Left</button>
 		<button onClick="move('R');">Right</button>
 		<button onClick="eat();">Eat</button>
-
 	</body>
 </html>
