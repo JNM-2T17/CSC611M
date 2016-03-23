@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Sheep Simulator</title>
+		<link rel="stylesheet" href="assets/css/style.css"/>
 		<script src="jquery.min.js"></script>
 	</head>
 	<body>
@@ -12,6 +13,16 @@
 
 			$(document).ready(function() {
 				console.log("Trying");
+
+				for(var i = 0; i < 100; i++){
+					var row = "<tr>\n";
+					for(var j = 0; j < 100; j++){
+						row += "\t<td data-row=\"" + i + "\" data-col=\"" + j + "\"></td>\n";
+					}
+					row += "</tr>\n"
+					$("#grid").append(row);
+				}
+				
 				$.ajax({
 					url:"sheep",
 					dataType : "json",
@@ -48,15 +59,18 @@
 			function setModel(map) {
 				var rows = map.split("\n");
 				var html = "";
-				for(x in rows) {
-					html += "<div>";
-					for(i = 0; i < rows[x].length; i++) {
-						html += rows[x].substring(i, i + 1);//replace this with the tile
-					}
 
-					html += "</div>";
+				$("td").attr("class", "");
+				
+				for(x in rows) {
+					for(i = 0; i < rows[x].length; i++) {
+						var string = rows[x].substring(i, i + 1);
+						
+						if(string != "T"){
+							$("td[data-row=" + x + "][data-col=" + i + "]").attr("class", "grid-" + string);
+						}
+					}
 				}
-				$("#field").html(html);
 			}
 
 			function move(dir) {
@@ -102,12 +116,12 @@
 
 
 		</script>
-		<div id="field"></div>
-		<button onClick="move('U');">Up</button>
-		<button onClick="move('D');">Down</button>
-		<button onClick="move('L');">Left</button>
-		<button onClick="move('R');">Right</button>
-		<button onClick="eat();">Eat</button>
+		<table id="grid"></table>
+		<button id="buttonUp" class="buttonControl" onClick="move('U');">Up</button>
+		<button id="buttonDown" class="buttonControl" onClick="move('D');">Down</button>
+		<button id="buttonLeft" class="buttonControl" onClick="move('L');">Left</button>
+		<button id="buttonRight" class="buttonControl" onClick="move('R');">Right</button>
+		<button id="buttonEat" onClick="eat();">Eat</button>
 
 	</body>
 </html>
