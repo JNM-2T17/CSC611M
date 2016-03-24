@@ -34,6 +34,30 @@
 						setTimeout(update,1000);
 					}
 				});
+
+				document.onkeydown = checkKey;
+
+				function checkKey(e) {
+
+				    e = e || window.event;
+
+				    if (e.keyCode == '87') {
+				        move('U');
+				    }
+				    else if (e.keyCode == '83') {
+				        move('D');
+				    }
+				    else if (e.keyCode == '65') {
+				       	move('L');
+				    }
+				    else if (e.keyCode == '68') {
+				       	move('R');
+				    }
+				    else if (e.keyCode == '69') {
+				    	eat();
+				    }
+
+				}
 			});
 
 			function update() {
