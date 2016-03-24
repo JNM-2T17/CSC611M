@@ -7,38 +7,29 @@ body{
 #grid{
 	margin: 0 auto;
 	border-collapse: collapse;
-	border-spacing: 0;
 	table-layout: fixed;
 	width: 2000px;
 }
 
 #grid td{
 	background: url("../img/grass.jpg") no-repeat;
-	background-size: 20px 20px;
+	background-size: 15px 15px;
 	margin: 0;
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 	padding: 0;
 	overflow: hidden;
 }
 
-#grid td.grid-S{
+#grid td.sheepGrass{
 	background-image: url("../img/grass-sheep.jpg");
 }
 
-#grid td.grid-X{
-	background-image: url("../img/grass-sheep-me.jpg");
-}
-
-#grid td.grid-s{
+#grid td.sheepNoGrass{
 	background-image: url("../img/nograss-sheep.jpg");
 }
 
-#grid td.grid-x{
-	background-image: url("../img/nograss-sheep-me.jpg");
-}
-
-#grid td.grid-t{
+#grid td.noGrass{
 	background-image: none;
 }
 
