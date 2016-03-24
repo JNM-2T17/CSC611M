@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Map {
 	private Tile[][] map;
 	private ArrayList<Sheep> sheep;
+	private boolean statusChanged;
 
 	public Map(int dimension) {
 		map = new Tile[dimension][dimension];
@@ -12,6 +13,7 @@ public class Map {
 			}
 		}
 		sheep = new ArrayList<Sheep>();
+		statusChanged = false;
 	}
 
 	public synchronized String spawnSheep() {
@@ -21,10 +23,13 @@ public class Map {
 		Sheep s = new Sheep(id,x,y);
 		map[y][x].addSheep(s);
 		sheep.add(s);
+		statusChanged = true;
+		// System.out.println("NOTIFY SPAWN");
+		notifyAll();
 		return s.id() + "";
 	}
 
-	public void moveSheep(String id, String dir) {
+	public synchronized void moveSheep(String id, String dir) {
 		Sheep s = sheep.get(Integer.parseInt(id));
 		switch(dir) {
 			case "U":
@@ -57,6 +62,26 @@ public class Map {
 				break;
 			default:	
 		}
+		statusChanged = true;
+		// System.out.println("NOTIFY MOVE");
+		notifyAll();
+	}
+
+	public synchronized void waitForChanges() {
+		try {
+			if( !statusChanged ) {
+				wait();
+			}
+			statusChanged = false;statusChanged = false;
+		} catch( InterruptedException ie) {
+			ie.printStackTrace();
+		}
+	}
+
+	public synchronized void periodicUpdate() {
+		statusChanged = true;
+		// System.out.println("NOTIFY PERIODIC");
+		notifyAll();
 	}
 
 	public synchronized boolean done() {
@@ -75,6 +100,9 @@ public class Map {
 		if( map[s.y()][s.x()].eat() ) {
 			s.eat();
 		}
+		statusChanged = true;
+		// System.out.println("NOTIFY EAT");
+		notifyAll();
 		return done();
 	}
 

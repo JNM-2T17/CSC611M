@@ -37,7 +37,7 @@ public class Server {
 				processors[i] = new ProcessThread();
 				processors[i].start();
 			}
-			field = new Map(20);
+			field = new Map(100);
  		} catch( IOException ioe ) {
 			ioe.printStackTrace();
 		}
@@ -46,11 +46,23 @@ public class Server {
 	public void start() {
 		Socket curr;
 		int i = 0;
+		(new Thread() {
+			public void run() {
+				while(true) {
+					try {
+						Thread.sleep(60000);
+					}catch(Exception e) {}
+					field.periodicUpdate();
+				}
+			}
+		}).start();
 		while(true) {
 			try {
 				System.out.println("Waiting");
 				curr = ss.accept();
-				System.out.println("CONNECTED TO " + curr.getInetAddress().getHostAddress());
+				System.out.println("CONNECTED TO " + curr.getInetAddress()
+									.getHostAddress() + " " 
+									+ new java.util.Date());
 				processors[i].addSocket(curr);
 				i = (i + 1) % processors.length;
 			} catch(IOException ioe) {
@@ -60,14 +72,14 @@ public class Server {
 	}
 
 	class ProcessThread extends Thread {
-		private Stack<Socket> sockets;
+		private ArrayList<Socket> sockets;
 
 		public ProcessThread() {
-			sockets = new Stack<Socket>();
+			sockets = new ArrayList<Socket>();
 		}
 
 		public synchronized void addSocket(Socket s) {
-			sockets.push(s);
+			sockets.add(s);
 			notifyAll();
 		}
 
@@ -79,7 +91,8 @@ public class Server {
 					e.printStackTrace();
 				}
 			}
-			Socket s = sockets.pop();
+			Socket s = sockets.get(0);
+			sockets.remove(0);
 			process(s);
 		}
 
@@ -164,7 +177,8 @@ public class Server {
 				try {
 					if( message.length() > 0 ) {
 						String fn = URLDecoder.decode(
-										message.split(" ")[1].substring(1));
+										message.split(" ")[1].substring(1)
+											,"UTF-8");
 
 						String[] parts = fn.split("\\?");
 						fn = parts[0];
@@ -243,6 +257,9 @@ public class Server {
 										break;
 									case "eat":
 										boolean done = field.eat(id);
+										break;
+									case "update":
+										field.waitForChanges();
 										break;
 									default:
 								}
