@@ -22,23 +22,23 @@ body{
 	overflow: hidden;
 }
 
-#grid td.grid-S{
+#grid td.grid-grassSheep{
 	background-image: url("../img/grass-sheep.jpg");
 }
 
-#grid td.grid-X{
+#grid td.grid-grassSheepMe{
 	background-image: url("../img/grass-sheep-me.jpg");
 }
 
-#grid td.grid-s{
+#grid td.grid-nograssSheep{
 	background-image: url("../img/nograss-sheep.jpg");
 }
 
-#grid td.grid-x{
+#grid td.grid-nograssSheepMe{
 	background-image: url("../img/nograss-sheep-me.jpg");
 }
 
-#grid td.grid-t{
+#grid td.grid-nograss{
 	background-image: none;
 }
 

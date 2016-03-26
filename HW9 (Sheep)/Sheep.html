@@ -90,6 +90,14 @@
 				for(x in rows) {
 					for(i = 0; i < rows[x].length; i++) {
 						var string = rows[x].substring(i, i + 1);
+
+						switch(string){
+							case "S": string = "grassSheep"; break;
+							case "s": string = "nograssSheep"; break;
+							case "X": string = "grassSheepMe"; break;
+							case "x": string = "nograssSheepMe"; break;
+							case "t": string = "nograss";
+						}
 						
 						if(string != "T"){
 							$("td[data-row=" + x + "][data-col=" + i + "]").attr("class", "grid-" + string);
