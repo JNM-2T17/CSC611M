@@ -78,7 +78,7 @@ public class Map {
 		}
 	}
 
-	public synchronized void periodicUpdate() {
+	public synchronized void update() {
 		statusChanged = true;
 		// System.out.println("NOTIFY PERIODIC");
 		notifyAll();

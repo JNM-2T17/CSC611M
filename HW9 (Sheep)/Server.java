@@ -23,6 +23,7 @@ public class Server {
 	private ServerSocket ss;
 	private ProcessThread[] processors;
 	private Map field;
+	private WaitMonitor wm;
 
 	public static void main(String[] args) {
 		Server s = new Server();
@@ -38,6 +39,7 @@ public class Server {
 				processors[i].start();
 			}
 			field = new Map(100);
+			wm = new WaitMonitor(processors.length,field);
  		} catch( IOException ioe ) {
 			ioe.printStackTrace();
 		}
@@ -46,16 +48,6 @@ public class Server {
 	public void start() {
 		Socket curr;
 		int i = 0;
-		(new Thread() {
-			public void run() {
-				while(true) {
-					try {
-						Thread.sleep(60000);
-					}catch(Exception e) {}
-					field.periodicUpdate();
-				}
-			}
-		}).start();
 		while(true) {
 			try {
 				System.out.println("Waiting");
@@ -259,7 +251,9 @@ public class Server {
 										boolean done = field.eat(id);
 										break;
 									case "update":
+										wm.register();
 										field.waitForChanges();
+										wm.unregister();
 										break;
 									default:
 								}
@@ -311,6 +305,29 @@ public class Server {
 			} catch( IOException ioe ) {
 				ioe.printStackTrace();
 			}
+		}
+	}
+
+	class WaitMonitor {
+		private int num;
+		private int nCtr;
+		private Map field;
+
+		public WaitMonitor(int num,Map field) {
+			this.num = num;
+			this.field = field;
+			nCtr = 0;
+		}
+
+		public synchronized void register() {
+			nCtr++;
+			if( nCtr == num) {
+				field.update();
+			}
+		}
+
+		public synchronized void unregister() {
+			nCtr--;
 		}
 	}
 }
