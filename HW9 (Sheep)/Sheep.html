@@ -1,0 +1,160 @@
+<html>
+	<head>
+		<title>Sheep Simulator</title>
+		<link rel="stylesheet" href="assets/css/style.css"/>
+		<link rel="shortcut icon" href="assets/img/nograss-sheep.jpg"/>
+		<script src="jquery.min.js"></script>
+	</head>
+	<body>
+		<script>
+			var id;
+			var sheep;
+			var done = false;
+			var interval;
+
+			$(document).ready(function() {
+				console.log("Trying");
+
+				for(var i = 0; i < 100; i++){
+					var row = "<tr>\n";
+					for(var j = 0; j < 100; j++){
+						row += "\t<td data-row=\"" + i + "\" data-col=\"" + j + "\"></td>\n";
+					}
+					row += "</tr>\n"
+					$("#grid").append(row);
+				}
+				
+				$.ajax({
+					url:"sheep",
+					dataType : "json",
+					success : function(a) {
+						console.log(a);
+						id = a.id;
+						setModel(a.map);
+						sheep = a.sheep; //please display the sheep somehow
+						setTimeout(update,1000);
+					}
+				});
+
+				document.onkeydown = checkKey;
+
+				function checkKey(e) {
+
+				    e = e || window.event;
+
+				    if (e.keyCode == '87') {
+				        move('U');
+				    }
+				    else if (e.keyCode == '83') {
+				        move('D');
+				    }
+				    else if (e.keyCode == '65') {
+				       	move('L');
+				    }
+				    else if (e.keyCode == '68') {
+				       	move('R');
+				    }
+				    else if (e.keyCode == '69') {
+				    	eat();
+				    }
+
+				}
+			});
+
+			function update() {
+				$.ajax({
+					url:"sheep",
+					method: "POST",
+					dataType : "json",
+					data : {
+						request : "update",
+						id : id
+					},
+					success : function(a) {
+						console.log(a);
+						setModel(a.map);
+						sheep = a.sheep; //please display the sheep somehow
+						if(a.done !== "true") {
+							console.log("SENDING ANOTHER REQUEST IN 1 second");
+							setTimeout(update,1000);
+						}
+					}
+				});
+			}
+
+			function setModel(map) {
+				var rows = map.split("\n");
+				var html = "";
+
+				$("td").attr("class", "");
+				
+				for(x in rows) {
+					for(i = 0; i < rows[x].length; i++) {
+						var string = rows[x].substring(i, i + 1);
+
+						switch(string){
+							case "S": string = "grassSheep"; break;
+							case "s": string = "nograssSheep"; break;
+							case "X": string = "grassSheepMe"; break;
+							case "x": string = "nograssSheepMe"; break;
+							case "t": string = "nograss";
+						}
+						
+						if(string != "T"){
+							$("td[data-row=" + x + "][data-col=" + i + "]").attr("class", "grid-" + string);
+						}
+					}
+				}
+			}
+
+			function move(dir) {
+				if( !done ) {
+					$.ajax({
+						url:"sheep",
+						method: "POST",
+						dataType : "json",
+						data : {
+							request : "move",
+							id : id,
+							dir : dir
+						},
+						success : function(a) {
+							console.log(a);
+							setModel(a.map);
+							sheep = a.sheep; //please display the sheep somehow
+							done = a.done === "true";
+						}
+					});
+				}
+			}
+
+			function eat() {
+				if( !done ) {
+					$.ajax({
+						url:"sheep",
+						method: "POST",
+						dataType : "json",
+						data : {
+							request : "eat",
+							id : id,
+						},
+						success : function(a) {
+							console.log(a);
+							setModel(a.map);
+							sheep = a.sheep; //please display the sheep somehow
+							done = a.done === "true";
+						}
+					});
+				}
+			}
+
+
+		</script>
+		<table id="grid"></table>
+		<button id="buttonUp" class="buttonControl" onClick="move('U');"></button>
+		<button id="buttonDown" class="buttonControl" onClick="move('D');"></button>
+		<button id="buttonLeft" class="buttonControl" onClick="move('L');"></button>
+		<button id="buttonRight" class="buttonControl" onClick="move('R');"></button>
+		<button id="buttonEat" onClick="eat();"></button>
+	</body>
+</html>
