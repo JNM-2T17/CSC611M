@@ -29,6 +29,11 @@ public class Map {
 		return s.id() + "";
 	}
 
+	public synchronized Sheep sheep(String index) {
+		int ind = Integer.parseInt(index);
+		return sheep.get(ind);
+	}
+
 	public synchronized void moveSheep(String id, String dir) {
 		Sheep s = sheep.get(Integer.parseInt(id));
 		switch(dir) {
@@ -140,6 +145,28 @@ public class Map {
 			for(int j = 0; j < map.length; j++ ) {
 				if( i == s.y() && j == s.x() ) {
 					ret += map[i][j].hasGrass() ? "X" : "x";
+				} else {
+					ret += map[i][j].toString();
+				}
+			}
+		}
+		return ret;
+	}
+
+	public String snapshot(String index,int width) {
+		Sheep s = sheep.get(Integer.parseInt(index));
+		int half = width / 2;
+		String ret = "";
+		for(int i = s.y() - half; i <= s.y() + half; i++) {
+			if( i > s.y() - half ) {
+				ret += "\\n";
+			}
+			for(int j = s.x() - half; j < s.x() + half; j++ ) {
+				if( i == s.y() && j == s.x() ) {
+					ret += map[i][j].hasGrass() ? "X" : "x";
+				} else if( i < 0 || i >= map.length 
+							|| j < 0 || j >= map.length ) {
+					ret += "B";
 				} else {
 					ret += map[i][j].toString();
 				}
