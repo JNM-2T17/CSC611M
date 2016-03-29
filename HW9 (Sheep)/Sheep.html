@@ -94,7 +94,7 @@
 				*****************************/
 				
 				for(x in rows) {
-					$("#grid-text").append(rows[x] + "<br>");
+					$("#grid-text").append(rows[x].replace(/t/g,"-") + "<br>");
 					/* GUI **********************
 					for(i = 0; i < rows[x].length; i++) {
 						var string = rows[x].substring(i, i + 1);
