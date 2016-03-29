@@ -29,6 +29,11 @@ public class Map {
 		return s.id() + "";
 	}
 
+	public synchronized Sheep sheep(String index) {
+		int ind = Integer.parseInt(index);
+		return sheep.get(ind);
+	}
+
 	public synchronized void moveSheep(String id, String dir) {
 		Sheep s = sheep.get(Integer.parseInt(id));
 		switch(dir) {
@@ -153,7 +158,7 @@ public class Map {
 		int half = width / 2;
 		String ret = "";
 		for(int i = s.y() - half; i <= s.y() + half; i++) {
-			if( i > 0 ) {
+			if( i > s.y() - half ) {
 				ret += "\\n";
 			}
 			for(int j = s.x() - half; j < s.x() + half; j++ ) {

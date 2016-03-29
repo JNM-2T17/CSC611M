@@ -234,9 +234,13 @@ public class Server {
 									}
 								} else {
 									String id = field.spawnSheep();
+									Sheep s = field.sheep(id);
 									replyContent = "{\"id\":\"" + id
 											+ "\",\"map\":\"" + field.snapshot(id,21) 
-											+ "\",\"sheep\":" + field.sheep() + "}";
+											+ "\",\"sheep\":" + field.sheep() 
+											+ ",\"x\":\"" + s.x() 
+											+ "\",\"y\":\"" + s.y() + "\"}";
+									System.out.println(replyContent);
 								}
 								break;
 							case "POST":
@@ -257,10 +261,15 @@ public class Server {
 										break;
 									default:
 								}
+								Sheep s = field.sheep(id);
 
 								replyContent = "{\"map\":\"" + field.snapshot(id,21) 
 											+ "\",\"sheep\":" + field.sheep() 
-											+ ",\"done\":\"" + field.done() + "\"}";
+											+ ",\"done\":\"" + field.done() 
+											+ "\",\"x\":\"" + s.x() 
+											+ "\",\"y\":\"" + s.y() 
+											+ "\"}";
+								System.out.println(replyContent);
 								break;
 							default:
 						}
