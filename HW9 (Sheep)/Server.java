@@ -236,7 +236,7 @@ public class Server {
 									String id = field.spawnSheep();
 									Sheep s = field.sheep(id);
 									replyContent = "{\"id\":\"" + id
-											+ "\",\"map\":\"" + field.snapshot(id,31) 
+											+ "\",\"map\":\"" + field.snapshot(id,11) 
 											+ "\",\"sheep\":" + field.sheep() 
 											+ ",\"x\":\"" + s.x() 
 											+ "\",\"y\":\"" + s.y() + "\"}";
@@ -263,7 +263,7 @@ public class Server {
 								}
 								Sheep s = field.sheep(id);
 
-								replyContent = "{\"map\":\"" + field.snapshot(id,31) 
+								replyContent = "{\"map\":\"" + field.snapshot(id,11) 
 											+ "\",\"sheep\":" + field.sheep() 
 											+ ",\"done\":\"" + field.done() 
 											+ "\",\"x\":\"" + s.x() 
