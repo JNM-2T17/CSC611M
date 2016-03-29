@@ -235,7 +235,7 @@ public class Server {
 								} else {
 									String id = field.spawnSheep();
 									replyContent = "{\"id\":\"" + id
-											+ "\",\"map\":\"" + field.toString(id) 
+											+ "\",\"map\":\"" + field.snapshot(id,21) 
 											+ "\",\"sheep\":" + field.sheep() + "}";
 								}
 								break;
@@ -258,7 +258,7 @@ public class Server {
 									default:
 								}
 
-								replyContent = "{\"map\":\"" + field.toString(id) 
+								replyContent = "{\"map\":\"" + field.snapshot(id,21) 
 											+ "\",\"sheep\":" + field.sheep() 
 											+ ",\"done\":\"" + field.done() + "\"}";
 								break;

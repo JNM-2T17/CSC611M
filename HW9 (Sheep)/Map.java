@@ -147,4 +147,26 @@ public class Map {
 		}
 		return ret;
 	}
+
+	public String snapshot(String index,int width) {
+		Sheep s = sheep.get(Integer.parseInt(index));
+		int half = width / 2;
+		String ret = "";
+		for(int i = s.y() - half; i <= s.y() + half; i++) {
+			if( i > 0 ) {
+				ret += "\\n";
+			}
+			for(int j = s.x() - half; j < s.x() + half; j++ ) {
+				if( i == s.y() && j == s.x() ) {
+					ret += map[i][j].hasGrass() ? "X" : "x";
+				} else if( i < 0 || i >= map.length 
+							|| j < 0 || j >= map.length ) {
+					ret += "B";
+				} else {
+					ret += map[i][j].toString();
+				}
+			}
+		}
+		return ret;
+	}
 }
