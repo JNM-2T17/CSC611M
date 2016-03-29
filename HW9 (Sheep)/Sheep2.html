@@ -15,6 +15,7 @@
 			$(document).ready(function() {
 				console.log("Trying");
 
+				/* GUI **********************
 				for(var i = 0; i < 100; i++){
 					var row = "<tr>\n";
 					for(var j = 0; j < 100; j++){
@@ -23,6 +24,7 @@
 					row += "</tr>\n"
 					$("#grid").append(row);
 				}
+				*****************************/
 				
 				$.ajax({
 					url:"sheep",
@@ -80,15 +82,21 @@
 						}
 					}
 				});
+				
 			}
 
 			function setModel(map) {
 				var rows = map.split("\n");
 				var html = "";
 
+				$("#grid-text").html("");
+				/* GUI **********************
 				$("td").attr("class", "");
+				*****************************/
 				
 				for(x in rows) {
+					$("#grid-text").append(rows[x] + "<br>");
+					/* GUI **********************
 					for(i = 0; i < rows[x].length; i++) {
 						var string = rows[x].substring(i, i + 1);
 
@@ -104,6 +112,7 @@
 							$("td[data-row=" + x + "][data-col=" + i + "]").attr("class", "grid-" + string);
 						}
 					}
+					*****************************/
 				}
 			}
 
@@ -150,7 +159,6 @@
 			
 			function goCrazy() {
 				while(true){
-					if( !done ) {
 						var r = Math.floor(Math.random() * 5) + 1 ;
 						r = String(r);
 						switch(r){
@@ -170,13 +178,17 @@
 								eat();
 								break;
 						}
-					}
 				}
 			}
 
 
 		</script>
 		<table id="grid"></table>
-		<button id="buttonEat" onClick="goCrazy();"></button>
+		<div id="grid-text"></div>
+		<button id="buttonUp" class="buttonControl" onClick="move('U');"></button>
+		<button id="buttonDown" class="buttonControl" onClick="move('D');"></button>
+		<button id="buttonLeft" class="buttonControl" onClick="move('L');"></button>
+		<button id="buttonRight" class="buttonControl" onClick="move('R');"></button>
+		<button id="buttonEat" onClick="eat();"></button>
 	</body>
 </html>
