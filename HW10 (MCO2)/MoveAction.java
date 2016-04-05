@@ -5,7 +5,7 @@ public class MoveAction implements Action {
 	private String message;
 	private ConnectionManager cm;
 	
-	public EatAction(Map field, Sheep s, final String id, final String message){
+	public MoveAction(Map field, Sheep s, final String id, final String message){
 		this.field = field;
 		this.s = s;
 		this.id = id;

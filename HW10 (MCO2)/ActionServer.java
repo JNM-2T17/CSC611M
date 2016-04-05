@@ -56,7 +56,7 @@ public class ActionServer implements Updatable {
 		}
 		
 		public void tryProcess(){
-			while(sockets.size() == 0 ) {
+			while(actions.size() == 0 ) {
 				try {
 					wait();
 				} catch( Exception e) {
