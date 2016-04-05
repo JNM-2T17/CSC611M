@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Sheep</title>
+		<link rel="stylesheet" href="css/style.css"/>
+		<script src="../jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				for(var i = 0; i < 100; i++){
+					var row = "<tr>\n";
+					for(var j = 0; j < 100; j++){
+						row += "\t<td class=\"grid-g\"></td>\n";
+					}
+					row += "</tr>\n"
+					$("#grid").append(row);
+				}
+			});
+		</script>
+	</head>
+
+	<body>
+		<button id="buttonUp" class="buttonControl"></button>
+		<button id="buttonDown" class="buttonControl"></button>
+		<button id="buttonRight" class="buttonControl"></button>
+		<button id="buttonLeft" class="buttonControl"></button>
+		<button id="buttonEat"></button>
+		<table id="grid">
+		</table>
+	</body>
+
+</html>
