@@ -288,7 +288,6 @@ public class ConnectionManager {
 							c = (char)dis.readUnsignedByte();
 							if( c != 30 ) {
 								header += c;
-								System.out.print(c);
 							}
 						} catch(Exception e ) {
 							unregister(tag);
