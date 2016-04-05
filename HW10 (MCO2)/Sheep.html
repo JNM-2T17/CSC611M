@@ -1,0 +1,215 @@
+<html>
+	<head>
+		<title>Sheep Simulator</title>
+		<link rel="stylesheet" href="assets/css/style.css"/>
+		<link rel="shortcut icon" href="assets/img/sheep.png"/>
+		<script src="jquery.min.js"></script>
+	</head>
+	<body>
+		<script>
+			var id;
+			var sheep;
+			var done = false;
+			var interval;
+			var x;
+			var y;
+
+			$(document).ready(function() {
+				for(var i = 0; i < 11; i++){
+					var row = "<tr>\n";
+					for(var j = 0; j < 11; j++){
+						row += "\t<td data-row=\"" + i + "\" data-col=\"" + j + "\"></td>\n";
+					}
+					row += "</tr>\n"
+					$("#grid").append(row);
+				}
+				
+				$.ajax({
+					url: "sheep",
+					dataType : "json",
+					success : function(a) {
+						console.log(a);
+						id = a.id;
+						setModel(a.map);
+						sheep = a.sheep; //please display the sheep somehow
+						x = a.x;
+						y = a.y;
+						setTimeout(update,1000);
+						updateStats();
+						updateMap();
+					}
+				});
+
+				document.onkeydown = checkKey;
+
+				function checkKey(e) {
+
+				    e = e || window.event;
+
+				    if (e.keyCode == '87') {
+				        move('U');
+				    }
+				    else if (e.keyCode == '83') {
+				        move('D');
+				    }
+				    else if (e.keyCode == '65') {
+				       	move('L');
+				    }
+				    else if (e.keyCode == '68') {
+				       	move('R');
+				    }
+				    else if (e.keyCode == '32') {
+				    	eat();
+				    }
+
+				}
+			});
+
+			function update() {
+				$.ajax({
+					url:"sheep",
+					method: "POST",
+					dataType : "json",
+					data : {
+						request : "update",
+						id : id
+					},
+					success : function(a) {
+						console.log(a);
+						setModel(a.map);
+						sheep = a.sheep; //please display the sheep somehow
+						if(a.done !== "true") {
+							console.log("SENDING ANOTHER REQUEST IN 1 second");
+							setTimeout(update,1000);
+						}
+					}
+				});
+			}
+
+			function setModel(map) {
+				var rows = map.split("\n");
+				var html = "";
+
+				$("#grid-text").html("");
+				updateGrid(rows);
+			}
+
+			function move(dir) {
+				if( !done ) {
+					$.ajax({
+						url:"sheep",
+						method: "POST",
+						dataType : "json",
+						data : {
+							request : "move",
+							id : id,
+							dir : dir
+						},
+						success : function(a) {
+							console.log(a);
+							setModel(a.map);
+							sheep = a.sheep; //please display the sheep somehow
+							x = a.x;
+							y = a.y;
+							done = a.done === "true";
+							updateMap();
+						}
+					});
+				}
+			}
+
+			function eat() {
+				if( !done ) {
+					$.ajax({
+						url:"sheep",
+						method: "POST",
+						dataType : "json",
+						data : {
+							request : "eat",
+							id : id,
+						},
+						success : function(a) {
+							console.log(a);
+							setModel(a.map);
+							sheep = a.sheep; //please display the sheep somehow
+							done = a.done === "true";
+							updateStats();
+						}
+					});
+				}
+			}
+
+			function updateStats(){
+				for(s in sheep){
+					var sheepRow = $("div[data-sheepid=" + sheep[s].id + "]");
+					var tempstring = "";
+					if(sheepRow.length > 0){
+						sheepRow.find(".numGrass").html(sheep[s].grass);
+					}
+					else{
+						if(sheep[s].id == id){
+							tempstring = "-me";
+						}
+
+						var contentstring = "\
+										<div class=\"sheepdiv\" data-sheepid=\"" + sheep[s].id + "\">\n\
+											<div><img src=\"assets/img/nograss-sheep" + tempstring + ".jpg\"></div>\n\
+											<div class=\"numGrass\">" + sheep[s].grass + "</div>\n\
+										</div>\n"
+
+						if(sheep[s].id == id){
+							$("#stats").prepend(contentstring);
+							tempstring = ""
+						}
+						else{
+							$("#stats").append(contentstring);
+						}
+					}
+				}
+			}
+
+			function updateMap(){
+				$("#sheepIcon").css("top", y * 2);
+				$("#sheepIcon").css("left", x * 2);
+			}
+
+			function updateGrid(rows){
+				$("td").attr("class", "");
+				
+				for(x in rows) {
+					for(i = 0; i < rows[x].length; i++) {
+						var string = rows[x].substring(i, i + 1);
+
+						switch(string){
+							case "S": string = "grassSheep"; break;
+							case "s": string = "nograssSheep"; break;
+							case "X": string = "grassSheepMe"; break;
+							case "x": string = "nograssSheepMe"; break;
+							case "t": string = "nograss"; break;
+							case "B": string = "blank";
+						}
+						
+						if(string != "T"){
+							$("td[data-row=" + x + "][data-col=" + i + "]").attr("class", "grid-" + string);
+						}
+					}
+				}
+			}
+
+
+		</script>
+		<div id="statsscroll">
+			<div id="stats"></div>
+		</div>
+		<div id="sheepMap"><img src="assets/img/sheep.png" id="sheepIcon"/></div>
+		<div id="tableContainer">
+			<table id="grid"></table>
+		</div>
+		<!-- <div id="grid-text" style="position: absolute; top: 10px; right: 10px;"></div> -->
+		<button id="buttonUp" class="buttonControl" onClick="move('U');"></button>
+		<button id="buttonDown" class="buttonControl" onClick="move('D');"></button>
+		<button id="buttonLeft" class="buttonControl" onClick="move('L');"></button>
+		<button id="buttonRight" class="buttonControl" onClick="move('R');"></button>
+		<button id="buttonEat" onClick="eat();"></button>
+	</body>
+</html>
