@@ -164,14 +164,17 @@ public class ConnectionManager {
 				// System.out.println(replyContent);
 				break;
 			case "SPAWN":
-				String sheepId = field.spawnSheep();
-				s = field.sheep(sheepId);
 				switch(iden) {
 					case "action":
+						String sheepId = field.spawnSheep();
+						s = field.sheep(sheepId);
 						Action a = new SpawnAction(field, s, id, sheepId);
 						updatable.schedule(a);
 						break;
 					case "update":
+						String[] split = message.split(" ");
+						String sheepId = field.spawnSheep(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+						s = field.sheep(sheepId);
 						System.out.println("UPDATING");
 						updatable.update();
 						break;

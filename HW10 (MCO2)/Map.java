@@ -28,6 +28,17 @@ public class Map {
 		notifyAll();
 		return s.id() + "";
 	}
+	
+	public synchronized String spawnSheep(int x, int y) {
+		int id = sheep.size();
+		Sheep s = new Sheep(id,x,y);
+		map[y][x].addSheep(s);
+		sheep.add(s);
+		statusChanged = true;
+		// System.out.println("NOTIFY SPAWN");
+		notifyAll();
+		return s.id() + "";
+	}
 
 	public synchronized Sheep sheep(String index) {
 		int ind = Integer.parseInt(index);

@@ -53,7 +53,7 @@ public class ActionServer implements Updatable {
 			}
 		}
 		
-		public void tryProcess(){
+		public synchronized void tryProcess(){
 			while(actions.size() == 0 ) {
 				try {
 					wait();
