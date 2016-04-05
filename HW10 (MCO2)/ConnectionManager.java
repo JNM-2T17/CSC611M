@@ -184,7 +184,7 @@ public class ConnectionManager {
 				break;
 			case "MOVE":
 				String[] args = message.split(" ");
-				String sheepId = args[0];
+				sheepId = args[0];
 				String dir = args[1];
 				s = field.sheep(sheepId);
 				field.moveSheep(sheepId,dir);
