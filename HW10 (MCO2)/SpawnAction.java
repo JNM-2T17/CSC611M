@@ -2,14 +2,14 @@ public class SpawnAction implements Action {
 	private Map field;
 	private Sheep s;
 	private String id;
-	private String message;
+	private String sheepId;
 	private ConnectionManager cm;
 	
-	public EatAction(Map field, Sheep s, final String id, final String message){
+	public SpawnAction(Map field, Sheep s, String id, String sheepId){
 		this.field = field;
 		this.s = s;
 		this.id = id;
-		this.message = message;
+		this.sheepId = sheepId;
 		cm = ConnectionManager.instance();
 	}
 	

@@ -4,7 +4,7 @@ public class UpdateServer implements Updatable {
 	private ConnectionManager cm;
 	private Map field;
 	private UpdateThread[] updateThreads;
-	private currThreadNo = 0;
+	private int currThreadNo = 0;
 
 	public static void main(String[] args) {
 		UpdateServer as = new UpdateServer();

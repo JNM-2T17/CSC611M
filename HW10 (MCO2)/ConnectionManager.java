@@ -167,7 +167,7 @@ public class ConnectionManager {
 				
 				switch(iden) {
 					case "action":
-						Action a = new SpawnAction(field, s, id, message);
+						Action a = new SpawnAction(field, s, id, sheepId);
 						updatable.schedule(a);
 						break;
 					case "update":
@@ -185,7 +185,7 @@ public class ConnectionManager {
 				
 				switch(iden) {
 					case "action":
-						Action a = new MoveAction(field, s, id, message);
+						Action a = new MoveAction(field, s, id, message, sheepId);
 						updatable.schedule(a);
 						break;
 					case "update":
