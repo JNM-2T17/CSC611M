@@ -101,13 +101,15 @@ public class ConnectionManager {
 
 	class Flusher extends Thread {
 		private String tag;
+		private boolean running;
 
 		public Flusher(String tag) {
 			this.tag = tag;
+			running = true;
 		}
 
 		public void run() {
-			while(true) {
+			while(running) {
 				try {
 					if( flushes.get(tag) > 0 ) {
 						doss.get(tag).flush();
@@ -118,6 +120,10 @@ public class ConnectionManager {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		public void stopFlush() {
+			running = false;
 		}
 	}
 
@@ -139,7 +145,7 @@ public class ConnectionManager {
 		sockets.remove(tag);
 		doss.remove(tag);
 		flushes.remove(tag);
-		flushThreads.get(tag).stop();
+		flushThreads.get(tag).stopFlush();
 		flushThreads.remove(tag);
 	}
 
