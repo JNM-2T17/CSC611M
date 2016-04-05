@@ -112,7 +112,7 @@ public class ConnectionManager {
 			while(running) {
 				try {
 					if( flushes.get(tag) > 0 ) {
-						doss.get(tag).flush();
+						flush(tag);
 						flushes.put(tag,0);
 					}
 					Thread.sleep(100);
@@ -125,6 +125,10 @@ public class ConnectionManager {
 		public void stopFlush() {
 			running = false;
 		}
+	}
+
+	public synchronized void flush(String tag) throws Exception {
+		doss.get(tag).flush();
 	}
 
 	public synchronized void register(String tag, Socket registree) {
@@ -251,8 +255,19 @@ public class ConnectionManager {
 				try {
 					Socket rep = actions.get(tag + header + " " + id);
 					if( rep != null ) {
+						String reply = "HTTP/1.1 200 OK\r\n" + 
+										"Date: Mon, 23 May 2005 22:38:34 GMT\r\n" + 
+										"Content-Type: text/html; charset=UTF-8\r\n" + 
+										"Content-Encoding: UTF-8\r\n";
+						
+						reply += "Content-Length: " + message.length() 
+									+ "\r\n" + 
+									"Server: Java/1.0 (Unix)\r\n" + 
+									"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
+									"Accept-Ranges: bytes\r\n" + 
+									"Connection: close\r\n\r\n" + message;
 						DataOutputStream dos = new DataOutputStream(rep.getOutputStream());
-						dos.writeBytes(message);
+						dos.writeBytes(reply);
 						dos.close();
 						rep.close();
 					}
