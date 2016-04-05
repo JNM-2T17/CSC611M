@@ -161,7 +161,7 @@ public class Map {
 			if( i > s.y() - half ) {
 				ret += "\\n";
 			}
-			for(int j = s.x() - half; j < s.x() + half; j++ ) {
+			for(int j = s.x() - half; j <= s.x() + half; j++ ) {
 				if( i == s.y() && j == s.x() ) {
 					ret += map[i][j].hasGrass() ? "X" : "x";
 				} else if( i < 0 || i >= map.length 
