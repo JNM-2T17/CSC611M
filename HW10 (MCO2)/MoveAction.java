@@ -3,13 +3,15 @@ public class MoveAction implements Action {
 	private Sheep s;
 	private String id;
 	private String message;
+	private String sheepId;
 	private ConnectionManager cm;
 	
-	public MoveAction(Map field, Sheep s, final String id, final String message){
+	public MoveAction(Map field, Sheep s, final String id, final String message, String sheepId){
 		this.field = field;
 		this.s = s;
 		this.id = id;
 		this.message = message;
+		this.sheepId = sheepId;
 		cm = ConnectionManager.instance();
 	}
 	
