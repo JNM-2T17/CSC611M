@@ -166,11 +166,6 @@ public class ConnectionManager {
 			case "SPAWN":
 				String sheepId = field.spawnSheep();
 				s = field.sheep(sheepId);
-				replyContent = "{\"id\":\"" + sheepId
-						+ "\",\"map\":\"" + field.snapshot(sheepId,11) 
-						+ "\",\"sheep\":" + field.sheep() 
-						+ ",\"x\":\"" + s.x() 
-						+ "\",\"y\":\"" + s.y() + "\"}";
 				switch(iden) {
 					case "action":
 						Action a = new SpawnAction(field, s, id, sheepId);

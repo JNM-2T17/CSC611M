@@ -5,7 +5,6 @@ public class ActionServer implements Updatable {
 	private ConnectionManager cm;
 	private Map field;
 	private ProcessThread[] threads;
-	private ServerSocket ss;
 	private int i;
 
 	public static void main(String[] args) {
@@ -13,7 +12,6 @@ public class ActionServer implements Updatable {
 	}
 
 	public ActionServer(String update) {
-		ss = new ServerSocket(8082);
 		cm = ConnectionManager.instance("action");
 		cm.connect("update",update);
 		field = new Map(100);
@@ -56,7 +54,7 @@ public class ActionServer implements Updatable {
 		}
 		
 		public void tryProcess(){
-			while(sockets.size() == 0 ) {
+			while(actions.size() == 0 ) {
 				try {
 					wait();
 				} catch( Exception e) {
