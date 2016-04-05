@@ -146,6 +146,7 @@ public class ConnectionManager {
 		String replyContent = "";
 		Sheep s = null;
 		System.out.println(tag + " " + header + " " + id + " " + message);
+		String sheepId = "";
 		switch(header) {
 			case "EAT":
 				boolean done = field.eat(message);
@@ -166,14 +167,14 @@ public class ConnectionManager {
 			case "SPAWN":
 				switch(iden) {
 					case "action":
-						String sheepId = field.spawnSheep();
+						sheepId = field.spawnSheep();
 						s = field.sheep(sheepId);
 						Action a = new SpawnAction(field, s, id, sheepId);
 						updatable.schedule(a);
 						break;
 					case "update":
 						String[] split = message.split(" ");
-						String sheepId = field.spawnSheep(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+						sheepId = field.spawnSheep(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 						s = field.sheep(sheepId);
 						System.out.println("UPDATING");
 						updatable.update();
