@@ -104,8 +104,8 @@ public class ConnectionManager {
 
 	public synchronized boolean sendMessage(String tag, String message) {
 		Socket s = sockets.get(tag);
-		// System.out.println("SENDING " + tag + " " + message);
 		if( s != null ) {
+			System.out.println("SENDING " + tag + " " + message + " to " + s);
 			try {
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				dos.writeBytes(message);
@@ -120,8 +120,8 @@ public class ConnectionManager {
 
 	public synchronized boolean sendMessage(String tag, String message, String replyHeader,Socket s) {
 		Socket temp = sockets.get(tag);
-		// System.out.println("SENDING " + tag + " " + message);
 		if( temp != null ) {
+			System.out.println("SENDING " + tag + " " + message);
 			try {
 				DataOutputStream dos = new DataOutputStream(temp.getOutputStream());
 				dos.writeBytes(message);
@@ -145,6 +145,7 @@ public class ConnectionManager {
 												, final String message) {
 		String replyContent = "";
 		Sheep s = null;
+		System.out.println(tag + " " + header + " " + id + " " + message);
 		switch(header) {
 			case "EAT":
 				boolean done = field.eat(message);
@@ -166,6 +167,7 @@ public class ConnectionManager {
 									+ (char)4);
 						break;
 					case "update":
+						System.out.println("UPDATING");
 						updatable.update();
 						break;
 				}
@@ -175,7 +177,7 @@ public class ConnectionManager {
 				String sheepId = field.spawnSheep();
 				s = field.sheep(sheepId);
 				replyContent = "{\"id\":\"" + sheepId
-						+ "\",\"map\":\"" + field.snapshot(id,11) 
+						+ "\",\"map\":\"" + field.snapshot(sheepId,11) 
 						+ "\",\"sheep\":" + field.sheep() 
 						+ ",\"x\":\"" + s.x() 
 						+ "\",\"y\":\"" + s.y() + "\"}";
@@ -188,6 +190,7 @@ public class ConnectionManager {
 										+ (char)4);
 						break;
 					case "update":
+						System.out.println("UPDATING");
 						updatable.update();
 						break;
 				}
@@ -215,6 +218,7 @@ public class ConnectionManager {
 									+ (char)4);
 						break;
 					case "update":
+						System.out.println("UPDATING");
 						updatable.update();
 						break;
 				}
@@ -262,7 +266,6 @@ public class ConnectionManager {
 						c = (char)dis.readUnsignedByte();
 						if( c != 4 ) {
 							message += c;
-							System.out.print(c);
 						}
 					} while(c != 4);
 					String ip = s.getInetAddress().getHostAddress();
@@ -309,6 +312,7 @@ public class ConnectionManager {
 							c = (char)dis.readUnsignedByte();
 							if( c != 30 ) {
 								header += c;
+								System.out.print(c);
 							}
 						} catch(Exception e ) {
 							unregister(tag);

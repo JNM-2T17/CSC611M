@@ -149,7 +149,7 @@ public class Server {
 					}
 					message += c;
 					if( end == 4 ) {
-						System.out.println("THIS IS THE MESSAGE: " + message);
+						// System.out.println("THIS IS THE MESSAGE: " + message);
 						if(message.split(" ")[0].equals("POST")) {
 							type = "POST";
 							String[] parts = message.split("\n");
