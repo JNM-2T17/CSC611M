@@ -173,7 +173,7 @@ public class ConnectionManager {
 						break;
 					case "update":
 						String[] split = message.split(" ");
-						String sheepId = field.spawnSheep(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+						sheepId = field.spawnSheep(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 						s = field.sheep(sheepId);
 						System.out.println("UPDATING");
 						updatable.update();
@@ -183,7 +183,7 @@ public class ConnectionManager {
 				break;
 			case "MOVE":
 				String[] args = message.split(" ");
-				sheepId = args[0];
+				String sheepId = args[0];
 				String dir = args[1];
 				s = field.sheep(sheepId);
 				field.moveSheep(sheepId,dir);
