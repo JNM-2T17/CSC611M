@@ -14,7 +14,6 @@ public class UpdateServer implements Updatable {
 		cm = ConnectionManager.instance("update");
 		field = new Map(100);
 		cm.setField(field);
-		schedule = new HashMap<String,String>();
 		cm.setUpdatable(this);
 		updateThreads = new UpdateThread[20];
 		for(int i = 0; i < 20; i++){
@@ -33,4 +32,6 @@ public class UpdateServer implements Updatable {
 		updateThreads[currThreadNo].schedule(key, tranId);
 		currThreadNo = (currThreadNo + 1) % 20;
 	}
+
+	public synchronized void schedule(Action a) {}
 }

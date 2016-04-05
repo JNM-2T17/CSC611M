@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class UpdateThread extends Thread {
 	private Map field;
 	private HashMap<String,String> schedule;
@@ -9,10 +11,13 @@ public class UpdateThread extends Thread {
 
 	public synchronized void update() {
 		while(schedule.isEmpty()){
-			wait();
+			try {
+				wait();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		String[] keys = schedule.keySet().toArray(new String[0]);
-
 		for(String str: keys) {
 			String info = schedule.get(str);
 			if( info != null ) {
@@ -23,14 +28,15 @@ public class UpdateThread extends Thread {
 							+ "\",\"x\":\"" + s.x() 
 							+ "\",\"y\":\"" + s.y() 
 							+ "\"}";
-				cm.sendMessage("server","REPLY " + str + " " 
-						+ replyContent.length() + (char)30 + replyContent);
+				ConnectionManager.instance().sendMessage("server","REPLY " + str + " " 
+						+ replyContent.length() + (char)30 + replyContent + (char)4);
 			}
 			schedule.remove(str);
 		}
 	}
 
 	public synchronized void schedule(String key,String tranId) {
+		System.out.println("Register " + key + " " + tranId);
 		schedule.put(key,tranId);
 	}
 
