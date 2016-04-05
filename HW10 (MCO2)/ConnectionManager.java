@@ -16,12 +16,18 @@ public class ConnectionManager {
 	private Updatable updatable;
 	private String iden;
 	private HashMap<String,Socket> sockets;
+	private HashMap<String,DataOutputStream> doss;
+	private HashMap<String,Integer> flushes;
+	private HashMap<String,Flusher> flushThreads;
 	private HashMap<String,Socket> actions;
 	private Receiver r;
 
 	private ConnectionManager(String iden) {
 		this.iden = iden;
 		sockets = new HashMap<String,Socket>();
+		doss = new HashMap<String,DataOutputStream>();
+		flushes = new HashMap<String,Integer>();
+		flushThreads = new HashMap<String,Flusher>();
 		actions = new HashMap<String,Socket>();
 		switch(iden) {
 			case "action":
@@ -93,13 +99,48 @@ public class ConnectionManager {
 		}
 	}
 
+	class Flusher extends Thread {
+		private String tag;
+
+		public Flusher(String tag) {
+			this.tag = tag;
+		}
+
+		public void run() {
+			while(true) {
+				try {
+					if( flushes.get(tag) > 0 ) {
+						doss.get(tag).flush();
+						flushes.put(tag,0);
+					}
+					Thread.sleep(100);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	public synchronized void register(String tag, Socket registree) {
 		sockets.put(tag,registree);
+		try {
+			doss.put(tag,new DataOutputStream(registree.getOutputStream()));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		flushes.put(tag,0);
+		Flusher f = new Flusher(tag);
+		flushThreads.put(tag,f);
+		f.start();
 		(new Listener(tag,registree)).start();
 	}
 
 	public synchronized void unregister(String tag) {
 		sockets.remove(tag);
+		doss.remove(tag);
+		flushes.remove(tag);
+		flushThreads.get(tag).stop();
+		flushThreads.remove(tag);
 	}
 
 	public synchronized boolean sendMessage(String tag, String message) {
@@ -109,7 +150,7 @@ public class ConnectionManager {
 			try {
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				dos.writeBytes(message);
-				dos.flush();
+				flushes.put(tag,flushes.get(tag) + 1);
 				return true;
 			} catch( Exception e ) {
 				e.printStackTrace();	
