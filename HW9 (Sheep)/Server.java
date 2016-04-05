@@ -214,7 +214,7 @@ public class Server {
 														"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
 														"Accept-Ranges: bytes\r\n" + 
 														"Connection: close\r\n\r\n";
-										// System.out.println(reply);
+										 System.out.println(reply);
 										dos.writeBytes(reply);
 										do{
 											read = is.read(fileInput,0
@@ -234,13 +234,9 @@ public class Server {
 									}
 								} else {
 									String id = field.spawnSheep();
-									Sheep s = field.sheep(id);
 									replyContent = "{\"id\":\"" + id
-											+ "\",\"map\":\"" + field.snapshot(id,21) 
-											+ "\",\"sheep\":" + field.sheep() 
-											+ ",\"x\":\"" + s.x() 
-											+ "\",\"y\":\"" + s.y() + "\"}";
-									System.out.println(replyContent);
+											+ "\",\"map\":\"" + field.toString(id) 
+											+ "\",\"sheep\":" + field.sheep() + "}";
 								}
 								break;
 							case "POST":
@@ -261,15 +257,10 @@ public class Server {
 										break;
 									default:
 								}
-								Sheep s = field.sheep(id);
 
-								replyContent = "{\"map\":\"" + field.snapshot(id,21) 
+								replyContent = "{\"map\":\"" + field.toString(id) 
 											+ "\",\"sheep\":" + field.sheep() 
-											+ ",\"done\":\"" + field.done() 
-											+ "\",\"x\":\"" + s.x() 
-											+ "\",\"y\":\"" + s.y() 
-											+ "\"}";
-								System.out.println(replyContent);
+											+ ",\"done\":\"" + field.done() + "\"}";
 								break;
 							default:
 						}
@@ -287,7 +278,7 @@ public class Server {
 									"ETag: \"3f80f-1b6-3e1cb03b\"\r\n" + 
 									"Accept-Ranges: bytes\r\n" + 
 									"Connection: close\r\n\r\n" + replyContent;
-						// System.out.println(reply);
+						 System.out.println(reply);
 						dos.writeBytes(reply);
 						dos.flush();
 						dos.close();
