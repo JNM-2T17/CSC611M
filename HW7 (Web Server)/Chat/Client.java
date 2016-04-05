@@ -79,7 +79,6 @@ public class Client {
         public void run() {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String msgout="";
-            System.out.println("Try typing");
             while(true){
                 try {
                     msgout = br.readLine();

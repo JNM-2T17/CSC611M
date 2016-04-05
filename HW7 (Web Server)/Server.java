@@ -42,6 +42,13 @@ public class Server {
 				String ip = curr.getInetAddress().getHostAddress();
 				System.out.println("CONNECTED TO " + ip);
 				DataInputStream dis = new DataInputStream(curr.getInputStream());
+<<<<<<< HEAD
+				String message = dis.readUTF();
+				System.out.println("GOT " + message);
+				for( User u : users ) {
+					if( !u.ip().equals(ip) ) {
+						sendMessage(u.getSocket(),u.name() + ": " + message);
+=======
 				String message = "";
 				String post = "";
 				char c;
@@ -53,6 +60,7 @@ public class Server {
 						c = (char)dis.readUnsignedByte();
 					} catch(EOFException e) {
 						break;
+>>>>>>> ac742e8352f8c6eff024a1bacec5d199596b21dc
 					}
 					switch( end ) {
 						case 0:
@@ -113,6 +121,21 @@ public class Server {
 					if( message.length() > 0 ) {
 						String fn = message.split(" ")[1].substring(1);
 
+<<<<<<< HEAD
+	public void signUp() {
+		int i = 0;
+		Socket curr;
+		while(i < users.length) {
+			try {
+				System.out.println("Waiting");
+				curr = ss.accept();
+				String ip = curr.getInetAddress().getHostAddress();
+				DataInputStream dis = new DataInputStream(curr.getInputStream());
+				String name = dis.readUTF();
+				System.out.println(name + " signed in");
+				users[i] = new User(name, ip);
+				i++;
+=======
 						String[] parts = fn.split("\\?");
 						fn = parts[0];
 						String[] paramsStr = new String[0];
@@ -189,6 +212,7 @@ public class Server {
 				} catch(IOException ioe) {}
 				
 				curr.close();
+>>>>>>> ac742e8352f8c6eff024a1bacec5d199596b21dc
 			} catch( IOException ioe ) {
 				ioe.printStackTrace();
 			}

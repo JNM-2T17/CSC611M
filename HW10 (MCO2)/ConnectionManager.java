@@ -150,21 +150,11 @@ public class ConnectionManager {
 			case "EAT":
 				boolean done = field.eat(message);
 				s = field.sheep(message);
-
-				replyContent = "{\"map\":\"" + field.snapshot(message,11) 
-							+ "\",\"sheep\":" + field.sheep() 
-							+ ",\"done\":\"" + field.done() 
-							+ "\",\"x\":\"" + s.x() 
-							+ "\",\"y\":\"" + s.y() 
-							+ "\"}";
+				
 				switch(iden) {
 					case "action":
-						sendMessage("server","REPLY " + id + " " 
-									+ replyContent.length() + (char)30 
-									+ replyContent + (char)4);
-						sendMessage("update","EAT " + id + " " 
-									+ message.length() + (char)30 + message 
-									+ (char)4);
+						Action a = new EatAction(field, s, id, message);
+						updatable.schedule(a);
 						break;
 					case "update":
 						System.out.println("UPDATING");
@@ -183,11 +173,8 @@ public class ConnectionManager {
 						+ "\",\"y\":\"" + s.y() + "\"}";
 				switch(iden) {
 					case "action":
-						sendMessage("server","REPLY " + id + " " 
-									+ replyContent.length() + (char)30 
-									+ replyContent + (char)4);
-						sendMessage("update","SPAWN " + id + " 0" + (char)30 
-										+ (char)4);
+						Action a = new SpawnAction(field, s, id, message);
+						updatable.schedule(a);
 						break;
 					case "update":
 						System.out.println("UPDATING");
@@ -202,20 +189,11 @@ public class ConnectionManager {
 				String dir = args[1];
 				s = field.sheep(sheepId);
 				field.moveSheep(sheepId,dir);
-				replyContent = "{\"map\":\"" + field.snapshot(sheepId,11) 
-							+ "\",\"sheep\":" + field.sheep() 
-							+ ",\"done\":\"" + field.done() 
-							+ "\",\"x\":\"" + s.x() 
-							+ "\",\"y\":\"" + s.y() 
-							+ "\"}";
+				
 				switch(iden) {
 					case "action":
-						sendMessage("server","REPLY " + id + " " 
-									+ replyContent.length() + (char)30 
-									+ replyContent + (char)4);
-						sendMessage("update","MOVE " + id + " " 
-									+ message.length() + (char)30 + message 
-									+ (char)4);
+						Action a = new MoveAction(field, s, id, message);
+						updatable.schedule(a);
 						break;
 					case "update":
 						System.out.println("UPDATING");
