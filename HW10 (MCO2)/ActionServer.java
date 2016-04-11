@@ -7,6 +7,7 @@ public class ActionServer implements Updatable {
 	private ProcessThread[] threads;
 	private UpdateThread[] updateThreads;
 	private int i;
+	private int currThreadNo;
 
 	public static void main(String[] args) {
 		ActionServer as = new ActionServer(args[0]);
@@ -19,6 +20,8 @@ public class ActionServer implements Updatable {
 		cm.setField(field);
 		cm.setUpdatable(this);
 		i = 0;
+
+		currThreadNo = 0;
 
 		// create action threads
 		threads = new ProcessThread[15];
