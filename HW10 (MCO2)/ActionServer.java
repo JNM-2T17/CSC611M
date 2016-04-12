@@ -5,7 +5,9 @@ public class ActionServer implements Updatable {
 	private ConnectionManager cm;
 	private Map field;
 	private ProcessThread[] threads;
+	private UpdateThread[] updateThreads;
 	private int i;
+	private int currThreadNo;
 
 	public static void main(String[] args) {
 		ActionServer as = new ActionServer(args[0]);
@@ -18,17 +20,34 @@ public class ActionServer implements Updatable {
 		cm.setField(field);
 		cm.setUpdatable(this);
 		i = 0;
-		//create threads
-		threads = new ProcessThread[20];
-		for(int x=0; x<20; x++){
+
+		currThreadNo = 0;
+
+		// create action threads
+		threads = new ProcessThread[15];
+		for(int x = 0; x < 15; x++){
 			threads[x] = new ProcessThread();
 			new Thread(threads[x]).start();
 		}
+
+		// create update threads
+		updateThreads = new UpdateThread[5];
+		for(int x = 0; x < 5; x++){
+			updateThreads[x] = new UpdateThread(field);
+			updateThreads[x].start();
+		}
 	}
 	
-	public void update(){}
+	public void update(){
+		for(UpdateThread thread : updateThreads){
+			thread.notifyMethod();
+		}
+	}
 	
-	public void schedule(String key, String info){}
+	public void schedule(String key, String info){
+		updateThreads[currThreadNo].schedule(key, tranId);
+		currThreadNo = (currThreadNo + 1) % 5;
+	}
 	
 	public void schedule(Action a){
 		threads[i].addAction(a);
