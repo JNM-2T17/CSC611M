@@ -121,11 +121,14 @@ public class ConnectionManager {
 	}
 
 	public synchronized void flush(String tag) throws Exception {
+		System.out.println("START flush");
 		System.out.println("Flushing " + tag);
 		doss.get(tag).flush();
+		System.out.println("END flush");
 	}
 
 	public synchronized void register(String tag, Socket registree) {
+		System.out.println("START register");
 		sockets.put(tag,registree);
 		try {
 			doss.put(tag,new DataOutputStream(registree.getOutputStream()));
@@ -137,34 +140,47 @@ public class ConnectionManager {
 		// flushThreads.put(tag,f);
 		// f.start();
 		(new Listener(tag,registree)).start();
+		System.out.println("END register");
 	}
 
 	public synchronized void unregister(String tag) {
+		System.out.println("START unregister");
 		sockets.remove(tag);
 		doss.remove(tag);
 		flushes.remove(tag);
 		// flushThreads.get(tag).stopFlush();
 		// flushThreads.remove(tag);
+		System.out.println("END unregister");
 	}
 
 	public synchronized boolean sendMessage(String tag, String message) {
+		System.out.println("START sendMessage");
+		System.out.println("Entering sendMessage");
 		Socket s = sockets.get(tag);
+		System.out.println("Socket gotten: "+s);
 		if( s != null ) {
 			System.out.println("SENDING " + tag + " " + message + " to " + s);
 			try {
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				dos.writeBytes(message);
+				System.out.println("Sending "+message);
 				dos.flush();
+				System.out.println("Flushed");
 				flushes.put(tag,flushes.get(tag) + 1);
+				System.out.println("Returning true");
+				System.out.println("END sendMessage");
 				return true;
 			} catch( Exception e ) {
 				e.printStackTrace();	
+				System.out.println("SHIT");
 			}
-		} 
+		}
+		System.out.println("Null socket"); 
 		return false;
 	}
 
 	public synchronized boolean sendMessage(String tag, String message, String replyHeader,Socket s) {
+		System.out.println("START sendMessage");
 		Socket temp = sockets.get(tag);
 		if( temp != null ) {
 			System.out.println("SENDING " + tag + " " + message);
@@ -175,6 +191,7 @@ public class ConnectionManager {
 				System.out.println("Waiting for " + replyHeader);
 				actions.put(tag + replyHeader,s);
 				flushes.put(tag,flushes.get(tag) + 1);
+				System.out.println("END sendMessage");
 				return true;
 			} catch( Exception e ) {
 				e.printStackTrace();	
@@ -184,12 +201,15 @@ public class ConnectionManager {
 	}
 
 	public synchronized boolean isConnected(String tag) {
+		System.out.println("START isConnected");
+		System.out.println("END isConnected");
 		return sockets.get(tag) != null;
 	}
 
 	public synchronized void processMessage(final String tag, String header
 												, final String id
 												, final String message) {
+		System.out.println("START processMessage");
 		String replyContent = "";
 		Sheep s = null;
 		System.out.println(tag + " " + header + " " + id + " " + message);
@@ -253,6 +273,7 @@ public class ConnectionManager {
 				break;
 			default:
 		}
+		System.out.println("EXIT "+tag + " " + header + " " + id + " " + message);
 	}
 
 	private class Receiver extends Thread {

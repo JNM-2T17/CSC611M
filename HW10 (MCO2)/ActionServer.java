@@ -24,15 +24,15 @@ public class ActionServer implements Updatable {
 		currThreadNo = 0;
 
 		// create action threads
-		threads = new ProcessThread[15];
-		for(int x = 0; x < 15; x++){
+		threads = new ProcessThread[19];
+		for(int x = 0; x < 19; x++){
 			threads[x] = new ProcessThread();
 			new Thread(threads[x]).start();
 		}
 
 		// create update threads
-		updateThreads = new UpdateThread[5];
-		for(int x = 0; x < 5; x++){
+		updateThreads = new UpdateThread[1];
+		for(int x = 0; x < 1; x++){
 			updateThreads[x] = new UpdateThread(field);
 			updateThreads[x].start();
 		}
@@ -42,7 +42,9 @@ public class ActionServer implements Updatable {
 	}
 	
 	public void update(){
+		System.out.println("\tStarting wake up");
 		updater.wakeUp();
+		System.out.println("\tWoken up");
 	}
 
 	class Updater extends Thread {
@@ -93,6 +95,7 @@ public class ActionServer implements Updatable {
 		}
 		
 		public synchronized void addAction(Action a){
+			System.out.println("Adding action: "+a);
 			actions.add(a);
 			notifyAll();
 		}
@@ -104,15 +107,20 @@ public class ActionServer implements Updatable {
 		}
 		
 		public synchronized void tryProcess(){
+			System.out.println("Entering tryProcess()");
 			while(actions.size() == 0 ) {
 				try {
+					System.out.println("Beginning wait");
 					wait();
+					System.out.println("Finished waiting");
 				} catch( Exception e) {
 					e.printStackTrace();
 				}
 			}
+			System.out.println("Ready to execute");
 			Action a = actions.get(0);
 			actions.remove(0);
+			System.out.println("Executing "+a);
 			a.execute();
 		}
 	}

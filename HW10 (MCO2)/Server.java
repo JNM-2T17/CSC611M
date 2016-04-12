@@ -18,6 +18,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
+import java.lang.management.*;
 
 public class Server {
 	private ServerSocket ss;
@@ -27,7 +28,25 @@ public class Server {
 	private ConnectionManager cm;
 	private static long tranId = 0;
 
+	private static class DeadlockMonitor implements Runnable {
+		public void run(){
+			while(true){
+				ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+				long[] threadIds = bean.findDeadlockedThreads(); // Returns null if no threads are deadlocked.
+
+				if (threadIds != null) {
+				    ThreadInfo[] infos = bean.getThreadInfo(threadIds);
+
+				    for (ThreadInfo info : infos) {
+					        System.out.println(info.getStackTrace());
+				    }
+				}
+			}
+		}
+	}
+
 	public static void main(String[] args) {
+		new Thread(new DeadlockMonitor()).start();
 		Server s = new Server(args);
 		s.start();
 	}
