@@ -92,33 +92,33 @@ public class ConnectionManager {
 		}
 	}
 
-	 class Flusher extends Thread {
-	 	private String tag;
-	 	private boolean running;
+	class Flusher extends Thread {
+		private String tag;
+		private boolean running;
 
-	 	public Flusher(String tag) {
-	 		this.tag = tag;
-	 		running = true;
-	 	}
+		public Flusher(String tag) {
+			this.tag = tag;
+			running = true;
+		}
 
-	 	public void run() {
-	 		while(running) {
-	 			try {
-	 				if( flushes.get(tag) > 0 ) {
-	 					flush(tag);
-	 					flushes.put(tag,0);
-	 				}
-	 				Thread.sleep(100);
-	 			} catch(Exception e) {
-	 				e.printStackTrace();
-	 			}
-	 		}
-	 	}
+		public void run() {
+			while(running) {
+				try {
+					if( flushes.get(tag) > 0 ) {
+						flush(tag);
+						flushes.put(tag,0);
+					}
+					Thread.sleep(100);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-	 	public void stopFlush() {
-	 		running = false;
-	 	}
-	 }
+		public void stopFlush() {
+			running = false;
+		}
+	}
 
 	public synchronized void flush(String tag) throws Exception {
 		System.out.println("START flush");
@@ -148,8 +148,8 @@ public class ConnectionManager {
 		sockets.remove(tag);
 		doss.remove(tag);
 		flushes.remove(tag);
-		flushThreads.get(tag).stopFlush();
-		flushThreads.remove(tag);
+		// flushThreads.get(tag).stopFlush();
+		// flushThreads.remove(tag);
 		System.out.println("END unregister");
 	}
 
@@ -233,23 +233,14 @@ public class ConnectionManager {
 				// System.out.println(replyContent);
 				break;
 			case "MOVE":
-				System.out.println("FUCK 1");
 				String[] args = message.split(" ");
-				System.out.println("FUCK 2");
 				sheepId = args[0];
-				System.out.println("FUCK 3");
 				String dir = args[1];
-				System.out.println("FUCK 4");
 				s = field.sheep(sheepId);
-				System.out.println("FUCK 5");
 				field.moveSheep(sheepId,dir);
-				System.out.println("FUCK 6");
 				a = new MoveAction(field, s, id, message, sheepId);
-				System.out.println("FUCK 7");
 				updatable.schedule(a);
-				System.out.println("FUCK 8");
 				updatable.update();
-				System.out.println("FUCK 9");
 				break;
 			case "REPLY":
 				try {

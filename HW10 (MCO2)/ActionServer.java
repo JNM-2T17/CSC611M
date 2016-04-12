@@ -24,15 +24,15 @@ public class ActionServer implements Updatable {
 		currThreadNo = 0;
 
 		// create action threads
-		threads = new ProcessThread[15];
-		for(int x = 0; x < 15; x++){
+		threads = new ProcessThread[19];
+		for(int x = 0; x < 19; x++){
 			threads[x] = new ProcessThread();
 			new Thread(threads[x]).start();
 		}
 
 		// create update threads
-		updateThreads = new UpdateThread[5];
-		for(int x = 0; x < 5; x++){
+		updateThreads = new UpdateThread[1];
+		for(int x = 0; x < 1; x++){
 			updateThreads[x] = new UpdateThread(field);
 			updateThreads[x].start();
 		}
