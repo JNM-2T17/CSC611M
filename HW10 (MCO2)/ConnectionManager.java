@@ -92,33 +92,33 @@ public class ConnectionManager {
 		}
 	}
 
-	// class Flusher extends Thread {
-	// 	private String tag;
-	// 	private boolean running;
+	class Flusher extends Thread {
+		private String tag;
+		private boolean running;
 
-	// 	public Flusher(String tag) {
-	// 		this.tag = tag;
-	// 		running = true;
-	// 	}
+		public Flusher(String tag) {
+			this.tag = tag;
+			running = true;
+		}
 
-	// 	public void run() {
-	// 		while(running) {
-	// 			try {
-	// 				if( flushes.get(tag) > 0 ) {
-	// 					flush(tag);
-	// 					flushes.put(tag,0);
-	// 				}
-	// 				Thread.sleep(100);
-	// 			} catch(Exception e) {
-	// 				e.printStackTrace();
-	// 			}
-	// 		}
-	// 	}
+		public void run() {
+			while(running) {
+				try {
+					if( flushes.get(tag) > 0 ) {
+						flush(tag);
+						flushes.put(tag,0);
+					}
+					Thread.sleep(100);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-	// 	public void stopFlush() {
-	// 		running = false;
-	// 	}
-	// }
+		public void stopFlush() {
+			running = false;
+		}
+	}
 
 	public synchronized void flush(String tag) throws Exception {
 		System.out.println("Flushing " + tag);

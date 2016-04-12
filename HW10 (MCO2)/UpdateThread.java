@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class UpdateThread extends Thread {
 	private Map field;
@@ -18,6 +19,7 @@ public class UpdateThread extends Thread {
 			}
 		}
 		String[] keys = schedule.keySet().toArray(new String[0]);
+		String messages = "";
 		for(String str: keys) {
 			String info = schedule.get(str);
 			if( info != null ) {
@@ -28,11 +30,12 @@ public class UpdateThread extends Thread {
 							+ "\",\"x\":\"" + s.x() 
 							+ "\",\"y\":\"" + s.y() 
 							+ "\"}";
-				ConnectionManager.instance().sendMessage("server","REPLY " + str + " " 
-						+ replyContent.length() + (char)30 + replyContent + (char)4);
+				messages += "REPLY " + str + " " 
+						+ replyContent.length() + (char)30 + replyContent + (char)4;
 			}
 			schedule.remove(str);
 		}
+		ConnectionManager.instance().sendMessages("server",messages);
 	}
 
 	public synchronized void schedule(String key,String tranId) {
