@@ -28,7 +28,7 @@ public class Server {
 	private ConnectionManager cm;
 	private static long tranId = 0;
 
-	private class DeadlockMonitor implements Runnable {
+	private static class DeadlockMonitor implements Runnable {
 		public void run(){
 			while(true){
 				ThreadMXBean bean = ManagementFactory.getThreadMXBean();
@@ -46,6 +46,7 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
+		new Thread(new DeadlockMonitor()).start();
 		Server s = new Server(args);
 		s.start();
 	}
