@@ -35,7 +35,7 @@ public class UpdateThread extends Thread {
 			}
 			schedule.remove(str);
 		}
-		ConnectionManager.instance().sendMessages("server",messages);
+		ConnectionManager.instance().sendMessage("server",messages);
 	}
 
 	public synchronized void schedule(String key,String tranId) {
