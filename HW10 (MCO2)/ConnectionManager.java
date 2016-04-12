@@ -121,6 +121,7 @@ public class ConnectionManager {
 	}
 
 	public synchronized void flush(String tag) throws Exception {
+		System.out.println("Flushing " + tag);
 		doss.get(tag).flush();
 	}
 
@@ -169,9 +170,9 @@ public class ConnectionManager {
 			try {
 				DataOutputStream dos = new DataOutputStream(temp.getOutputStream());
 				dos.writeBytes(message);
-				dos.flush();
 				System.out.println("Waiting for " + replyHeader);
 				actions.put(tag + replyHeader,s);
+				flushes.put(tag,flushes.get(tag) + 1);
 				return true;
 			} catch( Exception e ) {
 				e.printStackTrace();	
