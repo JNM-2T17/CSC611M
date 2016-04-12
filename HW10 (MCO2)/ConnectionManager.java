@@ -34,10 +34,6 @@ public class ConnectionManager {
 				r = new Receiver(8082);
 				r.start();
 				break;
-			case "update":
-				r = new Receiver(8083);
-				r.start();
-				break;	
 			default:
 		}
 	}
@@ -72,9 +68,6 @@ public class ConnectionManager {
 					case "action":
 						s = new Socket(ipAddress,8082);
 						break;
-					case "update":
-						s = new Socket(ipAddress,8083);
-						break;	
 					default:
 				}	
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -203,34 +196,17 @@ public class ConnectionManager {
 				boolean done = field.eat(message);
 				s = field.sheep(message);
 				
-				switch(iden) {
-					case "action":
-						Action a = new EatAction(field, s, id, message);
-						updatable.schedule(a);
-						break;
-					case "update":
-						System.out.println("UPDATING");
-						updatable.update();
-						break;
-				}
+				Action a = new EatAction(field, s, id, message);
+				updatable.schedule(a);
+				updatable.update();
 				// System.out.println(replyContent);
 				break;
 			case "SPAWN":
-				switch(iden) {
-					case "action":
-						sheepId = field.spawnSheep();
-						s = field.sheep(sheepId);
-						Action a = new SpawnAction(field, s, id, sheepId);
-						updatable.schedule(a);
-						break;
-					case "update":
-						String[] split = message.split(" ");
-						sheepId = field.spawnSheep(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-						s = field.sheep(sheepId);
-						System.out.println("UPDATING");
-						updatable.update();
-						break;
-				}
+				sheepId = field.spawnSheep();
+				s = field.sheep(sheepId);
+				a = new SpawnAction(field, s, id, sheepId);
+				updatable.schedule(a);
+				updatable.update();
 				// System.out.println(replyContent);
 				break;
 			case "MOVE":
@@ -239,17 +215,9 @@ public class ConnectionManager {
 				String dir = args[1];
 				s = field.sheep(sheepId);
 				field.moveSheep(sheepId,dir);
-				
-				switch(iden) {
-					case "action":
-						Action a = new MoveAction(field, s, id, message, sheepId);
-						updatable.schedule(a);
-						break;
-					case "update":
-						System.out.println("UPDATING");
-						updatable.update();
-						break;
-				}
+				a = new MoveAction(field, s, id, message, sheepId);
+				updatable.schedule(a);
+				updatable.update();
 				break;
 			case "REPLY":
 				try {

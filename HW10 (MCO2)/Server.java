@@ -41,7 +41,6 @@ public class Server {
 			ss = new ServerSocket(8081);
 			cm = ConnectionManager.instance("server");
 			cm.connect("action",ips[0]);
-			cm.connect("update",ips[1]);
 			processors = new ProcessThread[20];
 			for(int i = 0; i < processors.length; i++ ) {
 				processors[i] = new ProcessThread();
@@ -149,7 +148,7 @@ public class Server {
 					}
 					message += c;
 					if( end == 4 ) {
-						// System.out.println("THIS IS THE MESSAGE: " + message);
+						System.out.println("THIS IS THE MESSAGE: " + message);
 						if(message.split(" ")[0].equals("POST")) {
 							type = "POST";
 							String[] parts = message.split("\n");
@@ -272,7 +271,7 @@ public class Server {
 										break;
 									case "update":
 										sendMessage = id;
-										cm.sendMessage("update","UPDATE " + tranId
+										cm.sendMessage("action","UPDATE " + tranId
 													+ " " + sendMessage.length() 
 													+ (char)30 + sendMessage 
 													+ (char)4

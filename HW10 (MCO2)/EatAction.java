@@ -20,11 +20,8 @@ public class EatAction implements Action {
 							+ "\",\"x\":\"" + s.x() 
 							+ "\",\"y\":\"" + s.y() 
 							+ "\"}";
-		cm.sendMessage("server","REPLY " + id + " " 
-					+ replyContent.length() + (char)30 
-					+ replyContent + (char)4);
-		cm.sendMessage("update","EAT " + id + " " 
-					+ message.length() + (char)30 + message 
-					+ (char)4);
+		// cm.sendMessage("server","REPLY " + id + " " 
+		// 			+ replyContent.length() + (char)30 
+		// 			+ replyContent + (char)4);
 	}
 }

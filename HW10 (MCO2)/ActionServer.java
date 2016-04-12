@@ -8,14 +8,14 @@ public class ActionServer implements Updatable {
 	private UpdateThread[] updateThreads;
 	private int i;
 	private int currThreadNo;
+	private Updater updater;
 
 	public static void main(String[] args) {
-		ActionServer as = new ActionServer(args[0]);
+		ActionServer as = new ActionServer();
 	}
 
-	public ActionServer(String update) {
+	public ActionServer() {
 		cm = ConnectionManager.instance("action");
-		cm.connect("update",update);
 		field = new Map(100);
 		cm.setField(field);
 		cm.setUpdatable(this);
@@ -36,16 +36,47 @@ public class ActionServer implements Updatable {
 			updateThreads[x] = new UpdateThread(field);
 			updateThreads[x].start();
 		}
+
+		updater = new Updater();
+		updater.start();
 	}
 	
 	public void update(){
-		for(UpdateThread thread : updateThreads){
-			thread.notifyMethod();
+		updater.wakeUp();
+	}
+
+	class Updater extends Thread {
+		private boolean update;
+
+		public Updater() {
+			update = false;
+		}
+
+		public synchronized void run() {
+			while(true) {
+				try {
+					while(!update) {
+						wait();
+					}
+					update = false;
+					for(UpdateThread thread : updateThreads){
+						thread.notifyMethod();
+					}
+					Thread.sleep(100);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}	
+		}
+
+		public synchronized void wakeUp() {
+			update = true;
+			notifyAll();
 		}
 	}
 	
 	public void schedule(String key, String info){
-		updateThreads[currThreadNo].schedule(key, tranId);
+		updateThreads[currThreadNo].schedule(key, info);
 		currThreadNo = (currThreadNo + 1) % 5;
 	}
 	

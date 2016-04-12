@@ -25,8 +25,8 @@ public class MoveAction implements Action {
 		cm.sendMessage("server","REPLY " + id + " " 
 							+ replyContent.length() + (char)30 
 							+ replyContent + (char)4);
-		cm.sendMessage("update","MOVE " + id + " " 
-							+ message.length() + (char)30 + message 
-							+ (char)4);
+		// cm.sendMessage("update","MOVE " + id + " " 
+		// 					+ message.length() + (char)30 + message 
+		// 					+ (char)4);
 	}
 }

@@ -22,8 +22,8 @@ public class SpawnAction implements Action {
 		cm.sendMessage("server","REPLY " + id + " " 
 					+ replyContent.length() + (char)30 
 					+ replyContent + (char)4);
-		String str = s.x()+" "+s.y();
-		cm.sendMessage("update","SPAWN " + id + " "+str.length()+ + (char)30+str 
-						+ (char)4);
+		// String str = s.x()+" "+s.y();
+		// cm.sendMessage("update","SPAWN " + id + " "+str.length()+ + (char)30+str 
+		// 				+ (char)4);
 	}
 }
