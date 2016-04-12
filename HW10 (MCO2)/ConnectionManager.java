@@ -190,6 +190,7 @@ public class ConnectionManager {
 				dos.flush();
 				System.out.println("Waiting for " + replyHeader);
 				actions.put(tag + replyHeader,s);
+				System.out.println("Open Sockets: " + actions.size());
 				flushes.put(tag,flushes.get(tag) + 1);
 				System.out.println("END sendMessage");
 				return true;
@@ -263,6 +264,7 @@ public class ConnectionManager {
 						dos.close();
 						rep.close();
 						actions.remove(tag + header + " " + id);
+						System.out.println("Open Sockets: " + actions.size());
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
