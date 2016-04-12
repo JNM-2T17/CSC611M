@@ -38,7 +38,17 @@ public class Server {
 
 	public Server(String[] ips) {
 		try {
-			ss = new ServerSocket(8081);
+			ss = new ServerSocket(8081) {
+				public Socket accept() throws IOException
+												,SecurityException
+												,java.net.SocketTimeoutException
+												,java.nio.channels.IllegalBlockingModeException {
+					System.out.println("Trying to accept");
+					Socket s = super.accept();
+					System.out.println("ACCEPTED");
+					return s;
+				}
+			};
 			cm = ConnectionManager.instance("server");
 			cm.connect("action",ips[0]);
 			processors = new ProcessThread[20];
