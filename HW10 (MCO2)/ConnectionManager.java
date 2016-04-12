@@ -92,33 +92,33 @@ public class ConnectionManager {
 		}
 	}
 
-	class Flusher extends Thread {
-		private String tag;
-		private boolean running;
+	// class Flusher extends Thread {
+	// 	private String tag;
+	// 	private boolean running;
 
-		public Flusher(String tag) {
-			this.tag = tag;
-			running = true;
-		}
+	// 	public Flusher(String tag) {
+	// 		this.tag = tag;
+	// 		running = true;
+	// 	}
 
-		public void run() {
-			while(running) {
-				try {
-					if( flushes.get(tag) > 0 ) {
-						flush(tag);
-						flushes.put(tag,0);
-					}
-					Thread.sleep(100);
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+	// 	public void run() {
+	// 		while(running) {
+	// 			try {
+	// 				if( flushes.get(tag) > 0 ) {
+	// 					flush(tag);
+	// 					flushes.put(tag,0);
+	// 				}
+	// 				Thread.sleep(100);
+	// 			} catch(Exception e) {
+	// 				e.printStackTrace();
+	// 			}
+	// 		}
+	// 	}
 
-		public void stopFlush() {
-			running = false;
-		}
-	}
+	// 	public void stopFlush() {
+	// 		running = false;
+	// 	}
+	// }
 
 	public synchronized void flush(String tag) throws Exception {
 		System.out.println("Flushing " + tag);
@@ -133,9 +133,9 @@ public class ConnectionManager {
 			e.printStackTrace();
 		}
 		flushes.put(tag,0);
-		Flusher f = new Flusher(tag);
-		flushThreads.put(tag,f);
-		f.start();
+		// Flusher f = new Flusher(tag);
+		// flushThreads.put(tag,f);
+		// f.start();
 		(new Listener(tag,registree)).start();
 	}
 
@@ -154,6 +154,7 @@ public class ConnectionManager {
 			try {
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				dos.writeBytes(message);
+				dos.flush();
 				flushes.put(tag,flushes.get(tag) + 1);
 				return true;
 			} catch( Exception e ) {
@@ -170,6 +171,7 @@ public class ConnectionManager {
 			try {
 				DataOutputStream dos = new DataOutputStream(temp.getOutputStream());
 				dos.writeBytes(message);
+				dos.flush();
 				System.out.println("Waiting for " + replyHeader);
 				actions.put(tag + replyHeader,s);
 				flushes.put(tag,flushes.get(tag) + 1);
