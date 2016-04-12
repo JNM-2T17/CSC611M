@@ -42,7 +42,9 @@ public class ActionServer implements Updatable {
 	}
 	
 	public void update(){
+		System.out.println("\tStarting wake up");
 		updater.wakeUp();
+		System.out.println("\tWoken up");
 	}
 
 	class Updater extends Thread {
@@ -93,6 +95,7 @@ public class ActionServer implements Updatable {
 		}
 		
 		public synchronized void addAction(Action a){
+			System.out.println("Adding action: "+a);
 			actions.add(a);
 			notifyAll();
 		}
@@ -104,15 +107,20 @@ public class ActionServer implements Updatable {
 		}
 		
 		public synchronized void tryProcess(){
+			System.out.println("Entering tryProcess()");
 			while(actions.size() == 0 ) {
 				try {
+					System.out.println("Beginning wait");
 					wait();
+					System.out.println("Finished waiting");
 				} catch( Exception e) {
 					e.printStackTrace();
 				}
 			}
+			System.out.println("Ready to execute");
 			Action a = actions.get(0);
 			actions.remove(0);
+			System.out.println("Executing "+a);
 			a.execute();
 		}
 	}
