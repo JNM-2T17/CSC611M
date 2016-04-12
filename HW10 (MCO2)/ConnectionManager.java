@@ -259,8 +259,10 @@ public class ConnectionManager {
 									"Connection: close\r\n\r\n" + message;
 						DataOutputStream dos = new DataOutputStream(rep.getOutputStream());
 						dos.writeBytes(reply);
+						dos.flush();
 						dos.close();
 						rep.close();
+						actions.remove(tag + header + " " + id);
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
