@@ -38,8 +38,7 @@ public class Server {
 				    ThreadInfo[] infos = bean.getThreadInfo(threadIds);
 
 				    for (ThreadInfo info : infos) {
-				        StackTraceElement[] stack = info.getStackTrace();
-				        // Log or store stack trace information.
+					        System.out.println(info.getStackTrace());
 				    }
 				}
 			}
